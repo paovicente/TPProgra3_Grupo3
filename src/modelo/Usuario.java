@@ -7,6 +7,10 @@ public class Usuario
 	protected String contrasenia;
 	protected byte codUsuario;
 	
+	public Usuario() {
+		super();
+	}
+	
 	public Usuario(String nombre, String nombreDeUsuario, String contrasenia)
 	{
 		super();

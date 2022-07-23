@@ -1,5 +1,6 @@
 package modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -9,7 +10,7 @@ import java.util.Collections;
  *         el empleado obtuvo como calificación.
  *
  */
-public class ListaDelEmpleado extends Lista
+public class ListaDelEmpleado extends Lista implements Serializable
 {
 
 	/**
@@ -69,13 +70,14 @@ public class ListaDelEmpleado extends Lista
 	public void insertar(Empleador empleador, TicketBuscaEmpleado ticket, double puntaje)
 	{
 		int pos = Collections.binarySearch(this.puntajes, puntaje);
+		System.out.println("Posicion: "+ pos);
 		if (pos < 0)
 		{
 			this.empleadores.add(-pos-1, empleador);
 			this.tickets.add(-pos-1, ticket);
 			this.puntajes.add(-pos-1, puntaje);
+			System.out.println("Ticket "+ ticket.toString() +" del empleador "+ empleador.toString() + "agregado con puntaje "+ puntaje);
 		}
-		
 	}
 	
 

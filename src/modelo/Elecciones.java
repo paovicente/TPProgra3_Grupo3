@@ -1,8 +1,9 @@
 package modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Elecciones
+public class Elecciones implements Serializable
 {
     private ArrayList<TicketBuscaEmpleado> tickets = new ArrayList<TicketBuscaEmpleado>();
     private ArrayList<UsuarioInteractivo> emps = new ArrayList<UsuarioInteractivo>();

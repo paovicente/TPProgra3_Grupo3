@@ -2,6 +2,7 @@ package presentacion;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -309,8 +310,8 @@ public class Controlador implements ActionListener{  //es correcto que el contro
 		} else if (comando.equalsIgnoreCase("IniciarRondaEncuentros")) {
 			sistema.RondaDeEncuentrosLaborales();
 			this.vista.cerrar();
-			JOptionPane.showMessageDialog(null,"Realizando ronda de encuentros laborales...");
-			this.setVista(new VentanaLogin());
+			JOptionPane.showMessageDialog(null,"Realizando ronda de encuentros laborales...");     
+			this.setVista(new VentanaLogin());       // abrir ventana de admin y poner boton de deslogueo. setear atributo usuario = null en controlador
 		} else if (comando.equalsIgnoreCase("AgregarAdmin")) {
 			this.setVista(new VentanaRegistro());
 		} else if (comando.equalsIgnoreCase("MostrarEmpleados")) {  //deshabilitar boton luego de esto, sino va a seguir agregando si se vuelve a apretar y no deberia
@@ -340,7 +341,7 @@ public class Controlador implements ActionListener{  //es correcto que el contro
 				this.setVista(new VentanaElecciones());
 				VentanaElecciones ventElecciones = (VentanaElecciones) vista;
 				ListaDelEmpleado lista = empleado.getTicket().getLista();
-				for (int i=0;i<lista.getTickets().size();i++) {
+				for (int i=0;i<lista.getTickets().size();i++) { //anda mal, mete un solo ticket cuando deberia haber varios..... posibles errores: generacion lista empleado, generacion formulario empleador, forma de agregar
 					ventElecciones.getModeloLista().addElement(lista.getTickets().get(i));  //muestro tickets.... ver como mejorar esto. deberia mostrar ticket y empleador. yo haria otra ventana con 3 listas de columna (puntaje, empleador/empleado y ticket). 
 				}
 				ventElecciones.repaint();
@@ -392,16 +393,20 @@ public class Controlador implements ActionListener{  //es correcto que el contro
 			//esta validacion es porque usamos una misma ventana tanto para empleadores como para empleadores, podria no estar si hacemos una ventana para cada clase, pero no sé que conviene
 			if (usuario.getCodUsuario()==1) {
 				Empleado empleado = (Empleado) usuario;
-				int indice= ventElecciones.getList().getSelectedIndex(); //devuelve el indice del arraylist de ticket, asi puedo acceder tanto al empleador como al ticket (ver ListaDelEmpleado)
+				int indice= ventElecciones.getList().getSelectedIndex(); //devuelve el indice del arraylist de ticket, asi puedo acceder tanto al empleador como al ticket (ver ListaDelEmpleado). ¿restar 1?
 				sistema.RondaDeEleccionDeUnEmpleado(empleado, empleado.getTicket().getLista().getTickets().get(indice), empleado.getTicket().getLista().getEmpleadores().get(indice));
 				JOptionPane.showMessageDialog(null,"Empleador agregado correctamente");	
+				this.vista.cerrar();
+				this.setVista(new VentanaEmpleado());
 
 			} else if (usuario.getCodUsuario()==2) {	
 				sistema.RondaDeEleccionDeUnEmpleador((Empleador) usuario, ticketEmpleador, (Empleado) ventElecciones.getList().getSelectedValue());
 				JOptionPane.showMessageDialog(null,"Empleado agregado correctamente");	
+				this.vista.cerrar();
+				this.setVista(new VentanaEmpleador());
 			}
 			
-		}
+		} 
 	}
 
 }

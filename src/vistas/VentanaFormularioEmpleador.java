@@ -709,6 +709,5 @@ public class VentanaFormularioEmpleador extends JFrame implements IVista {
 		this.setVisible(true);
 		
 	}
-
 	
 }

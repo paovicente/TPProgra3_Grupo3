@@ -54,4 +54,5 @@ public class CargaCompleta extends CargaHoraria
 		return "Carga Completa";
 	}
 
+	
 }

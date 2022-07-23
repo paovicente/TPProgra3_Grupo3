@@ -80,4 +80,11 @@ public class FormularioDeBusqueda
 		this.tipoPuesto = tipoPuesto;
 	}
 
+	@Override
+	public String toString() {
+		return "FormularioDeBusqueda [cargaHoraria=" + cargaHoraria + ", estudiosCursados=" + estudiosCursados
+				+ ", experiencia=" + experiencia + ", locacion=" + locacion + ", rangoEtario=" + rangoEtario
+				+ ", remuneracion=" + remuneracion + ", tipoPuesto=" + tipoPuesto + "]";
+	}
+
 }

@@ -1,16 +1,17 @@
 package modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
 import presentacion.BolsaDeTrabajo;
 
-public class Empleador extends UsuarioInteractivo implements Runnable
+public class Empleador extends UsuarioInteractivo implements Runnable, Serializable
 {
 
 	private ArrayList<TicketBuscaEmpleado> tickets = new ArrayList<TicketBuscaEmpleado>();
 	private IPersona persona;
-	private Elecciones elecciones;
+	private Elecciones elecciones = new Elecciones();
 	private boolean elegido = false;
 	/**
 	 * @aggregation composite

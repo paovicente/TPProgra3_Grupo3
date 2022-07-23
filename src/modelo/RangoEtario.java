@@ -34,4 +34,10 @@ public abstract class RangoEtario
 	 * @return: String indicando la sublase de RangoEtario.
 	 */
 	public abstract String diceTipo();
+	
+	@Override
+	public String toString() {
+		return "[" + diceTipo() + "]";
+	}
+	
 }

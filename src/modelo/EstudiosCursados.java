@@ -34,4 +34,10 @@ public abstract class EstudiosCursados
 	 * @return: String indicando la sublase de Estudios Cursados.
 	 */
 	public abstract String diceTipo();
+	
+	@Override
+	public String toString() {
+		return "[" + diceTipo() + "]";
+	}
+	
 }

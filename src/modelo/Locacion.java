@@ -34,4 +34,10 @@ public abstract class Locacion
 	 * @return: String indicando la sublase de Locacion.
 	 */
 	public abstract String diceTipo();
+	
+	@Override
+	public String toString() {
+		return "[" + diceTipo() + "]";
+	}
+		
 }

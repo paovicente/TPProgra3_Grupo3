@@ -34,4 +34,10 @@ public abstract class Experiencia
 	 * @return: String indicando la sublase de Experiencia.
 	 */
 	public abstract String diceTipo();
+	
+	@Override
+	public String toString() {
+		return "[" + diceTipo() + "]";
+	}
+	
 }

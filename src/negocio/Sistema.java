@@ -1,5 +1,6 @@
 package negocio;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import modelo.AdminAgencia;
@@ -40,6 +41,9 @@ import modelo.UsuarioInteractivo;
 import modelo.V1;
 import modelo.V2;
 import modelo.V3;
+import persistencia.IPersistencia;
+import persistencia.Objeto;
+import persistencia.PersistenciaBIN;
 
 public class Sistema
 {
@@ -358,10 +362,8 @@ public class Sistema
 				{
 
 					if (((Empleador) this.empleadores.get(j)).getTickets().get(k).diceEstado().equals("Activo")
-							&& ((Empleado) this.empleados.get(i)).getTicket().diceEstado().equals("Activo"))
-					{
-						this.calculaCoincidencias((Empleado) empleados.get(i),
-								((Empleador) empleadores.get(j)).getTickets().get(k)); // calculo puntaje
+							&& ((Empleado) this.empleados.get(i)).getTicket().diceEstado().equals("Activo")){ //si ambos tickets estána ctivos
+						aux = this.calculaCoincidencias((Empleado) empleados.get(i),((Empleador) empleadores.get(j)).getTickets().get(k)); // calculo puntaje
 						((Empleado) this.empleados.get(i)).getTicket().getLista().insertar(
 								(Empleador) empleadores.get(j), ((Empleador) empleadores.get(j)).getTickets().get(k),
 								aux);
@@ -441,6 +443,7 @@ public class Sistema
 	public void RondaDeEleccionDeUnEmpleador(Empleador empleador, TicketBuscaEmpleado ticket, Empleado empleado)
 	{
 		empleador.getElecciones().agregar(ticket, empleado);
+		//System.out.println("Empleador: "+empleador.toString()+"Agregado el ticket"+ ticket.toString() + "del empleado "+ empleado.toString());
 	}
 	
 	/**
@@ -545,5 +548,35 @@ public class Sistema
 		else if (estado.equals("Suspender"))
 			ticket.suspende();
 	}
+	
+	public void escribirPersistencia() throws IOException{  //catchear excepcion en el main
+		Objeto objeto = new Objeto(this.empleados,this.empleadores);
+		IPersistencia persistencia = new PersistenciaBIN();
+		persistencia.abrirOutput("Datos.bin");
+		System.out.println("Creando archivo de escritura");
+		persistencia.escribir(objeto);
+		System.out.println("Datos grabados exitosamente");
+		persistencia.cerrarOutput();
+		System.out.println("Archivo cerrado");
+	}
+	
+	/**
+	 * Hace la lectura de la persistencia.<br> 
+	 * 
+	 */
+	
+	public void leerPersistencia() throws ClassNotFoundException, IOException, Exception {
+		IPersistencia persistencia = new PersistenciaBIN();
+		persistencia.abrirInput("Datos.bin");
+		System.out.println("Archivo abierto");
+		Objeto objeto = (Objeto) persistencia.leer();
+		System.out.println("Datos recuperados");
+		persistencia.cerrarInput();
+		System.out.println("Archivo cerrado");
+		this.empleados = objeto.getEmpleados();
+		this.empleadores = objeto.getEmpleadores();
+		//this.contrataciones = objeto.getContrataciones(); 
+		
+	} 
 	
 }

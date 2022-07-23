@@ -48,4 +48,10 @@ private double valor;
 	 * @return: String indicando la sublase de Remuneracion.
 	 */
 	public abstract String diceTipo();
+
+	@Override
+	public String toString() {
+		return "[" + diceTipo() + "]";
+	}
+	
 }

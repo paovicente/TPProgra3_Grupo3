@@ -1,8 +1,9 @@
 package modelo;
 
+import java.io.Serializable;
 import java.util.Observable;
 
-public class TicketSimplificado extends Observable//no se extiende de ticket!!
+public class TicketSimplificado extends Observable implements Serializable//no se extiende de ticket!!
 {
 
 	private String tipoDeTrabajo;

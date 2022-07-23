@@ -1,10 +1,11 @@
 package modelo;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import presentacion.BolsaDeTrabajo;
 
-public class Empleado extends UsuarioInteractivo implements Runnable
+public class Empleado extends UsuarioInteractivo implements Runnable, Serializable
 {
 
 	private String telefono;
@@ -12,6 +13,10 @@ public class Empleado extends UsuarioInteractivo implements Runnable
 	private TicketBuscaEmpleo ticket = null;
 	private TicketSimplificado ticketSimplificado;
 
+	public Empleado() {
+		super();
+	}
+	
 	public Empleado(String nombre, String nombreDeUsuario, String contrasenia,
 			String telefono, int edad)
 	{

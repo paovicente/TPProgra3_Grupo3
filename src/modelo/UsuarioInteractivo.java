@@ -6,6 +6,10 @@ public class UsuarioInteractivo extends Usuario
 	private int puntaje;
 	private Elecciones elecciones;
 
+	public UsuarioInteractivo() {
+		super();
+	}
+	
 	public UsuarioInteractivo(String nombre, String nombreDeUsuario, String contrasenia)
 	{
 		super(nombre, nombreDeUsuario, contrasenia);

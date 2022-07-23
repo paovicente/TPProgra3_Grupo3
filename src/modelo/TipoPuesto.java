@@ -37,8 +37,13 @@ public abstract class TipoPuesto
 	 */
 	public abstract String diceTipo();
 	
-	public double getComision()
-	{
+	public double getComision(){
 		return this.comision;
 	}
+
+	@Override
+	public String toString() {
+		return "[" + diceTipo() + "]";
+	}
+		
 }
