@@ -1,6 +1,8 @@
 package modelo;
 
-public abstract class DecoratorRubros implements IPersona{
+import java.io.Serializable;
+
+public abstract class DecoratorRubros implements IPersona, Serializable{
     protected IPersona encapsulado;
 
 	public DecoratorRubros(IPersona encapsulado)

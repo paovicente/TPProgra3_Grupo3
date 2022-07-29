@@ -1,6 +1,8 @@
 package modelo;
 
-public class FinalizadoState implements IState
+import java.io.Serializable;
+
+public class FinalizadoState implements IState, Serializable
 {
 
 	private Ticket ticket;

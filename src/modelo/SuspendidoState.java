@@ -1,6 +1,8 @@
 package modelo;
 
-public class SuspendidoState implements IState
+import java.io.Serializable;
+
+public class SuspendidoState implements IState, Serializable
 {
 
 	private Ticket ticket;

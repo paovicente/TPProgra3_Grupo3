@@ -11,13 +11,14 @@ public class Empleador extends UsuarioInteractivo implements Runnable, Serializa
 
 	private ArrayList<TicketBuscaEmpleado> tickets = new ArrayList<TicketBuscaEmpleado>();
 	private IPersona persona;
-	private Elecciones elecciones = new Elecciones();
 	private boolean elegido = false;
 	/**
 	 * @aggregation composite
 	 */
 	
-	
+	public Empleador() {
+		this.codUsuario=2;
+	}
 	public void addTicket(TicketBuscaEmpleado ticket) {
 		this.tickets.add(ticket);
 	}

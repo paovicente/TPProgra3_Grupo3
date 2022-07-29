@@ -1,10 +1,12 @@
 package modelo;
 
+import java.io.Serializable;
+
 /**
  * @author Usuario
  * rango etario especificado en el FormularioDeBusqueda.
  */
-public abstract class RangoEtario
+public abstract class RangoEtario implements Serializable
 {
 	/**
 	 * Calcula el valor resultante de la matriz de RangoEtario en la Ronda de Encuentros Laborales.<br> 

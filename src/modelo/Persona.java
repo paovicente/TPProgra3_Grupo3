@@ -1,6 +1,8 @@
 package modelo;
 
-public abstract class Persona implements IPersona{
+import java.io.Serializable;
+
+public abstract class Persona implements IPersona, Serializable{
 	
 
 }

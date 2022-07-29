@@ -1,6 +1,8 @@
 package modelo;
 
-public class ActivoState implements IState
+import java.io.Serializable;
+
+public class ActivoState implements IState, Serializable
 {
 
 	private Ticket ticket;

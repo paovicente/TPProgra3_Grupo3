@@ -2,51 +2,23 @@ package presentacion;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javax.swing.AbstractButton;
 import javax.swing.JOptionPane;
 
 import modelo.AdminAgencia;
-import modelo.CargaCompleta;
-import modelo.CargaExtendida;
-import modelo.CargaHoraria;
-import modelo.CargaMedia;
 import modelo.ContraseniaIncorrectaException;
-import modelo.Entre40y50;
-import modelo.EstudiosCursados;
-import modelo.Experiencia;
-import modelo.HomeOffice;
-import modelo.Indistinto;
-import modelo.Junior;
-import modelo.ListaDelEmpleado;
-import modelo.ListaDelEmpleador;
-import modelo.Locacion;
-import modelo.Management;
-import modelo.MasDe50;
-import modelo.Media;
-import modelo.MenosDe40;
-import modelo.Mucha;
-import modelo.Nada;
-import modelo.NombreIncorrectoException;
-import modelo.Presencial;
-import modelo.Primario;
-import modelo.RangoEtario;
-import modelo.Remuneracion;
-import modelo.Secundario;
-import modelo.Senior;
-import modelo.Terciario;
-import modelo.TicketBuscaEmpleado;
-import modelo.TipoPuesto;
-import modelo.Usuario;
-import modelo.UsuarioInteractivo;
-import modelo.V1;
-import modelo.V2;
-import modelo.V3;
+import modelo.Elecciones;
 import modelo.Empleado;
 import modelo.Empleador;
+import modelo.ListaDelEmpleado;
+import modelo.ListaDelEmpleador;
+import modelo.NombreIncorrectoException;
+import modelo.TicketBuscaEmpleado;
+import modelo.Usuario;
+import modelo.UsuarioInteractivo;
+import negocio.Sistema;
 import vistas.IVista;
 import vistas.VentanaAgencia;
 import vistas.VentanaElecciones;
@@ -60,7 +32,6 @@ import vistas.VentanaRegistro;
 import vistas.VentanaRegistroAdmin;
 import vistas.VentanaRegistroEmpleado;
 import vistas.VentanaRegistroEmpleador;
-import negocio.Sistema;
 
 public class Controlador implements ActionListener{  //es correcto que el controlador cree (haga el new de) los objetos????
 	
@@ -311,13 +282,14 @@ public class Controlador implements ActionListener{  //es correcto que el contro
 			sistema.RondaDeEncuentrosLaborales();
 			this.vista.cerrar();
 			JOptionPane.showMessageDialog(null,"Realizando ronda de encuentros laborales...");     
-			this.setVista(new VentanaLogin());       // abrir ventana de admin y poner boton de deslogueo. setear atributo usuario = null en controlador
+			this.setVista(new VentanaAgencia());       // abrir ventana de admin y poner boton de deslogueo. setear atributo usuario = null en controlador
 		} else if (comando.equalsIgnoreCase("AgregarAdmin")) {
 			this.setVista(new VentanaRegistro());
 		} else if (comando.equalsIgnoreCase("MostrarEmpleados")) {  //deshabilitar boton luego de esto, sino va a seguir agregando si se vuelve a apretar y no deberia
 			VentanaAgencia ventAgencia = (VentanaAgencia) this.vista;
 			ventAgencia.getListEmpleados();
 			ArrayList<UsuarioInteractivo> empleados = sistema.getEmpleados();
+			//System.out.println("empleados: " + empleados);
 			Iterator<UsuarioInteractivo> iterador = empleados.iterator();
 			while (iterador.hasNext()) {
 				ventAgencia.getModeloListaEmpleados().addElement(iterador.next());
@@ -329,6 +301,7 @@ public class Controlador implements ActionListener{  //es correcto que el contro
 			ArrayList<UsuarioInteractivo> empleadores = sistema.getEmpleadores();
 			Iterator<UsuarioInteractivo> iterador = empleadores.iterator();
 			while (iterador.hasNext()) {
+				//System.out.println("Empleador:" + iterador.next().toString());
 				ventAgencia.getModeloListaEmpleadores().addElement(iterador.next()); //agrego empleadores, ver como mostrar el ToString
 			}
 			ventAgencia.repaint();
@@ -358,7 +331,20 @@ public class Controlador implements ActionListener{  //es correcto que el contro
 				
 			
 			}	
-		} else if(comando.equalsIgnoreCase("SeguirTicketEmpleador")){     //despues muestro la lista de empleadores para dicho ticket
+		} else if (comando.equalsIgnoreCase("MostrarEleccionesEmpleado")){
+			//VentanaEmpleado ventEmpleado = (VentanaEmpleado) this.vista;
+			//ventEmpleado.getListEleccionesEmpleado();
+			
+			Empleado empleado = (Empleado) usuario;
+			VentanaEmpleado ventEmpleado = (VentanaEmpleado) this.vista;
+			Iterator <UsuarioInteractivo> iterador = empleado.getElecciones().getEmps().iterator();
+			while (iterador.hasNext()) {
+				ventEmpleado.getModeloLista().addElement(iterador.next());  //solo estoy mostrando el empleador, deberia quizas mostrar tambien el ticket 
+			}
+			
+			//aaaaaaaaaaaaaa aca no se q va
+			ventEmpleado.repaint();
+		}else if(comando.equalsIgnoreCase("SeguirTicketEmpleador")){     //despues muestro la lista de empleadores para dicho ticket
 			VentanaEleccionesTicketEmpleador ventElecciones = (VentanaEleccionesTicketEmpleador) vista;
 			this.ticketEmpleador=(TicketBuscaEmpleado) ventElecciones.getList().getSelectedValue();
 			this.vista.cerrar();
@@ -372,7 +358,7 @@ public class Controlador implements ActionListener{  //es correcto que el contro
 			}
 				
 			
-		}else if(comando.equalsIgnoreCase("IniciarRondaEleccionesEmpleador")){   //primero muestro para que el empleador elija un ticket
+		}else if(comando.equalsIgnoreCase("IniciarEleccionesEmpleador")){   //primero muestro para que el empleador elija un ticket
 			Empleador empleador = (Empleador) usuario;
 			if (empleador.getTickets().isEmpty()) {
 				JOptionPane.showMessageDialog(null,"No tenes tickets");	
@@ -387,7 +373,15 @@ public class Controlador implements ActionListener{  //es correcto que el contro
 				JOptionPane.showMessageDialog(null,"Selecciona un ticket");	
 			}
 	
-		}else if (comando.equalsIgnoreCase("AgregarALista")) {
+		}else if (comando.equalsIgnoreCase("MostrarEleccionesEmpleador")) { 
+			VentanaEmpleador ventEmpleador = (VentanaEmpleador) vista;
+			Empleador empleador = (Empleador) usuario;
+			Iterator <UsuarioInteractivo> iterador = empleador.getElecciones().getEmps().iterator();
+			while (iterador.hasNext()) {
+				ventEmpleador.getModeloLista().addElement(iterador.next());  //solo estoy mostrando el empleado, deberia quizas mostrar tambien el ticket con el que lo contraté?
+			}
+			
+		}else if(comando.equalsIgnoreCase("AgregarALista")) {
 			VentanaElecciones ventElecciones = (VentanaElecciones) vista;
 	  
 			//esta validacion es porque usamos una misma ventana tanto para empleadores como para empleadores, podria no estar si hacemos una ventana para cada clase, pero no sé que conviene
@@ -406,7 +400,17 @@ public class Controlador implements ActionListener{  //es correcto que el contro
 				this.setVista(new VentanaEmpleador());
 			}
 			
-		} 
+		}else if (comando.equalsIgnoreCase("IniciarContrataciones")) {
+			System.out.println("entroooo a contrataciones");
+			sistema.RondaDeContrataciones();
+			this.vista.cerrar();
+			JOptionPane.showMessageDialog(null,"Realizando ronda de contrataciones...");     
+			this.setVista(new VentanaAgencia());
+		}else if (comando.equalsIgnoreCase("CerrarSesion")) {
+			this.vista.cerrar();
+			this.usuario=null;
+			this.setVista(new VentanaLogin());
+		}
 	}
 
 }

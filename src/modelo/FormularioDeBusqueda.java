@@ -1,6 +1,8 @@
 package modelo;
 
-public class FormularioDeBusqueda
+import java.io.Serializable;
+
+public class FormularioDeBusqueda implements Serializable
 {
 	private CargaHoraria cargaHoraria;
 	private EstudiosCursados estudiosCursados;

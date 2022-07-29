@@ -1,10 +1,12 @@
 package modelo;
 
+import java.io.Serializable;
+
 /**
  * @author Usuario
  * Tipo de Puesto especificado en el FormularioDeBusqueda.
  */
-public abstract class TipoPuesto
+public abstract class TipoPuesto implements Serializable
 {
 	private double comision;
 	/**

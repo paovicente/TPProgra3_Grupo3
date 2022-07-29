@@ -1,11 +1,13 @@
 package modelo;
 
+import java.io.Serializable;
+
 /**
  * @author Usuario
  * La carga horaria especificada en el FormularioDeBusqueda
  *
  */
-public abstract class CargaHoraria
+public abstract class CargaHoraria implements Serializable
 {
 	/**
 	 * Calcula el valor resultante de la matriz de Carga Horaria en la Ronda de Encuentros Laborales.<br> 

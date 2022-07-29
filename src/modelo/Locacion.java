@@ -1,10 +1,12 @@
 package modelo;
 
+import java.io.Serializable;
+
 /**
  * @author Usuario
  * La locacion especificada en el FormularioDeBusqueda.
  */
-public abstract class Locacion
+public abstract class Locacion implements Serializable
 { 
 	/**
 	 * Calcula el valor resultante de la matriz de Locacion en la Ronda de Encuentros Laborales.<br> 

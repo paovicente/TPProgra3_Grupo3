@@ -8,9 +8,9 @@ public abstract class Ticket implements Serializable
     /**
      * @aggregation composite
      */
-    private transient FormularioDeBusqueda formulario; //transient para que no lo persista 
-	private transient LocalDate fecha;             //si quisiera persistir estos objetos deberia hacerlos serializables junto con todos sus atributos
-	private transient IState estado;
+    private FormularioDeBusqueda formulario; //transient para que no lo persista 
+	private LocalDate fecha;             //si quisiera persistir estos objetos deberia hacerlos serializables junto con todos sus atributos
+	private IState estado;
 	private Lista lista;
 
 	public Ticket(FormularioDeBusqueda formulario)

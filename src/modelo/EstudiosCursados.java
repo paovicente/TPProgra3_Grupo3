@@ -1,10 +1,12 @@
 package modelo;
 
+import java.io.Serializable;
+
 /**
  * @author Usuario
  * Son los estudios cursados especificados en el FormularioDeBusqueda
  */
-public abstract class EstudiosCursados
+public abstract class EstudiosCursados implements Serializable
 {
 	/**
 	 * Calcula el valor resultante de la matriz de Estudios Cursados en la Ronda de Encuentros Laborales.<br> 

@@ -1,10 +1,12 @@
 package modelo;
 
+import java.io.Serializable;
+
 /**
  * @author Usuario
  * La experiencia especificada en el FormularioDeBusqueda.
  */
-public abstract class Experiencia
+public abstract class Experiencia implements Serializable
 {
 	/**
 	 * Calcula el valor resultante de la matriz de Experiencia en la Ronda de Encuentros Laborales.<br> 

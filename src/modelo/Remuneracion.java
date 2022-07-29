@@ -1,10 +1,12 @@
 package modelo;
 
+import java.io.Serializable;
+
 /**
  * @author Usuario
  * remuneracion especificada en el FormularioDeBusqueda.
  */
-public abstract class Remuneracion
+public abstract class Remuneracion implements Serializable
 {
 	
 private double valor;

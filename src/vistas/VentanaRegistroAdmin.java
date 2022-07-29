@@ -31,7 +31,7 @@ public class VentanaRegistroAdmin extends JFrame implements KeyListener, IVista 
 	private JPanel panel_IngresaDatosEmpleado;
 	private JPanel panel_botonRegistro;
 	private JButton btn_Registrarse;
-	private ActionListener actionlistener;
+	private ActionListener actionListener;
 	private JPanel panelNombre;
 	private JPanel panelInputNombre;
 	private JLabel lbl_Nombre;
@@ -86,6 +86,7 @@ public class VentanaRegistroAdmin extends JFrame implements KeyListener, IVista 
 		this.panelInputNombre.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 130));
 		
 		this.inputNombre = new JTextField();
+		this.inputNombre.addKeyListener(this);
 		this.inputNombre.setFont(new Font("Century Gothic", Font.PLAIN, 14));
 		this.inputNombre.setColumns(10);
 		this.panelInputNombre.add(this.inputNombre);
@@ -97,18 +98,14 @@ public class VentanaRegistroAdmin extends JFrame implements KeyListener, IVista 
 		this.panel_botonRegistro.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		this.btn_Registrarse = new JButton("Registrarse");
+		this.btn_Registrarse.setEnabled(false);
 		this.btn_Registrarse.setActionCommand("RegistrarseAdmin");
 		this.btn_Registrarse.setFont(new Font("Century Gothic", Font.PLAIN, 16));
 		this.panel_botonRegistro.add(this.btn_Registrarse);
 	}
 
-	public ActionListener getActionlistener() {
-		return actionlistener;
-	}
-
-	public void setActionlistener(ActionListener actionlistener) {
-		this.btn_Registrarse.addActionListener(actionlistener);
-		this.actionlistener = actionlistener;
+	public ActionListener getActionListener() {
+		return actionListener;
 	}
 
 	public JButton getBtn_Registrarse() {
@@ -132,12 +129,6 @@ public class VentanaRegistroAdmin extends JFrame implements KeyListener, IVista 
 	}
 
 	@Override
-	public void setActionListener(ActionListener actionListener) {
-		this.btn_Registrarse.addActionListener(actionListener);
-		this.actionlistener=actionListener;
-	}
-
-	@Override
 	public void cerrar() {
 		this.dispose();
 		
@@ -147,4 +138,11 @@ public class VentanaRegistroAdmin extends JFrame implements KeyListener, IVista 
 	public void mostrar() {
 		this.setVisible(true);
 	}
+
+	@Override
+	public void setActionListener(ActionListener actionListener) {
+		this.btn_Registrarse.addActionListener(actionListener);
+		this.actionListener = actionListener;	
+	}
+
 }

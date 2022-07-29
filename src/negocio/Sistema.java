@@ -2,6 +2,7 @@ package negocio;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import modelo.AdminAgencia;
 import modelo.CargaCompleta;
@@ -41,9 +42,12 @@ import modelo.UsuarioInteractivo;
 import modelo.V1;
 import modelo.V2;
 import modelo.V3;
+import persistencia.EmpleadoDTO;
+import persistencia.EmpleadorDTO;
 import persistencia.IPersistencia;
-import persistencia.Objeto;
+import persistencia.ObjetoDTO;
 import persistencia.PersistenciaBIN;
+import persistencia.UtilDTO;
 
 public class Sistema
 {
@@ -483,6 +487,7 @@ public class Sistema
 					if (empl.get(j).getElecciones().getTickets().get(indice).equals(ticket) && ticket.getCantEmpObt() != ticket.getCantEmpSolic()) // verifico que elticket este en el mismo indice que el empleado
 					{
 						// Contratado!!
+						System.out.println("El empleador: " + empleadores.get(i) + "ha contratado a: " + empl);
 						((Empleado) empl.get(j)).getTicket().finaliza();
 						empl.get(j).setPuntaje(empl.get(j).getPuntaje()+10);
 						ticket.setCantEmpObt(ticket.getCantEmpObt()+1); //sumo 1 a la cantidad de Empleados obtenidos	
@@ -550,7 +555,25 @@ public class Sistema
 	}
 	
 	public void escribirPersistencia() throws IOException{  //catchear excepcion en el main
-		Objeto objeto = new Objeto(this.empleados,this.empleadores);
+		ArrayList<EmpleadoDTO> empleadosDTO = UtilDTO.EmpleadosToDTO(empleados);
+		ArrayList<EmpleadorDTO> empleadoresDTO = UtilDTO.EmpleadoresToDTO(empleadores);
+		ObjetoDTO objetoDTO = new ObjetoDTO(empleadosDTO,empleadoresDTO);
+		IPersistencia persistencia = new PersistenciaBIN();
+		persistencia.abrirOutput("Datos.bin");
+		System.out.println("Creando archivo de escritura");
+		persistencia.escribir(objetoDTO);
+		System.out.println("Datos grabados exitosamente");
+		persistencia.cerrarOutput();
+		System.out.println("Archivo cerrado");
+		Iterator<UsuarioInteractivo> iterador = UtilDTO.DTOToEmpleados(objetoDTO.getEmpleados()).iterator();
+		while (iterador.hasNext())
+			System.out.println("Empleados cargados:"+ iterador.next().toString());
+		iterador = UtilDTO.DTOToEmpleadores(objetoDTO.getEmpleadores()).iterator();
+		while (iterador.hasNext())
+			System.out.println("Empleadores cargados:"+ iterador.next().toString());
+		//System.out.println("Objeto cargado: "+ objeto.toString()); */
+		
+	/*	Objeto objeto = new Objeto(this.empleados,this.empleadores);
 		IPersistencia persistencia = new PersistenciaBIN();
 		persistencia.abrirOutput("Datos.bin");
 		System.out.println("Creando archivo de escritura");
@@ -558,6 +581,13 @@ public class Sistema
 		System.out.println("Datos grabados exitosamente");
 		persistencia.cerrarOutput();
 		System.out.println("Archivo cerrado");
+		Iterator<UsuarioInteractivo> iterador = objeto.getEmpleadores().iterator();
+		while (iterador.hasNext())
+			System.out.println("Empleadores cargados:"+ iterador.next().toString());
+		iterador = objeto.getEmpleados().iterator();
+		while (iterador.hasNext())
+			System.out.println("Empleados cargados:"+ iterador.next().toString());
+		//System.out.println("Objeto cargado: "+ objeto.toString()); */
 	}
 	
 	/**
@@ -569,13 +599,35 @@ public class Sistema
 		IPersistencia persistencia = new PersistenciaBIN();
 		persistencia.abrirInput("Datos.bin");
 		System.out.println("Archivo abierto");
+		ObjetoDTO objeto = (ObjetoDTO) persistencia.leer();
+		System.out.println("Datos recuperados");
+		persistencia.cerrarInput();
+		System.out.println("Archivo cerrado");
+		this.empleadores=UtilDTO.DTOToEmpleadores(objeto.getEmpleadores());
+		this.empleados=UtilDTO.DTOToEmpleados(objeto.getEmpleados());
+		Iterator<UsuarioInteractivo> iterador = this.empleadores.iterator();
+		while (iterador.hasNext())
+			System.out.println("Empleadores cargados:"+ iterador.next().toString());
+		iterador = this.empleados.iterator();
+		while (iterador.hasNext())
+			System.out.println("Empleados cargados:"+ iterador.next().toString());
+		//ArrayList<EmpleadorDTO> empleadoresDTO = UtilDTO.DTOToEmpleadores(null);
+		/*IPersistencia persistencia = new PersistenciaBIN();
+		persistencia.abrirInput("Datos.bin");
+		System.out.println("Archivo abierto");
 		Objeto objeto = (Objeto) persistencia.leer();
 		System.out.println("Datos recuperados");
 		persistencia.cerrarInput();
 		System.out.println("Archivo cerrado");
 		this.empleados = objeto.getEmpleados();
 		this.empleadores = objeto.getEmpleadores();
-		//this.contrataciones = objeto.getContrataciones(); 
+		Iterator<UsuarioInteractivo> iterador = this.empleadores.iterator();
+		while (iterador.hasNext())
+			System.out.println("Empleadores cargados:"+ iterador.next().toString());
+		iterador = this.empleados.iterator();
+		while (iterador.hasNext())
+			System.out.println("Empleados cargados:"+ iterador.next().toString());
+		//this.contrataciones = objeto.getContrataciones();  */
 		
 	} 
 	

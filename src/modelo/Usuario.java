@@ -43,6 +43,23 @@ public class Usuario
 		return "Usuario [nombre=" + nombre + ", nombreDeUsuario=" + nombreDeUsuario + ", contrasenia=" + contrasenia
 				+ ", codUsuario=" + codUsuario + "]";
 	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public void setNombreDeUsuario(String nombreDeUsuario) {
+		this.nombreDeUsuario = nombreDeUsuario;
+	}
+
+	public void setContrasenia(String contrasenia) {
+		this.contrasenia = contrasenia;
+	}
+
+	public void setCodUsuario(byte codUsuario) {
+		this.codUsuario = codUsuario;
+	}
+	
 	
 	
 }

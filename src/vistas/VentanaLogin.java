@@ -26,8 +26,11 @@ import javax.swing.border.LineBorder;
 import java.awt.Rectangle;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JPasswordField;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
 
-public class VentanaLogin extends JFrame implements IVista {
+public class VentanaLogin extends JFrame implements IVista, KeyListener {
 
 	private JPanel contentPane;
 	private JPanel panel_TituloImagen;
@@ -36,7 +39,6 @@ public class VentanaLogin extends JFrame implements IVista {
 	private JPanel panelBotones;
 	private JLabel labelNombreUsuario;
 	private JLabel labelContraseña;
-	private JTextField inputContraseña;
 	private JPanel panel_NombreUsuario;
 	private JPanel panel_inputNombreUsuario;
 	private JPanel panel_Contraseña;
@@ -53,6 +55,7 @@ public class VentanaLogin extends JFrame implements IVista {
 	private JLabel labelFoto;
 	private JButton btnRegistrarse;
 	private ActionListener actionListener;
+	private JPasswordField inputContraseña;
 	
 	public ActionListener getActionListener() {
 		return actionListener;
@@ -122,7 +125,7 @@ public class VentanaLogin extends JFrame implements IVista {
 		
 		this.labelFoto = new JLabel("");
 		this.labelFoto.setHorizontalAlignment(SwingConstants.CENTER);
-		this.labelFoto.setIcon(new ImageIcon("C:\\Users\\Gamer\\Downloads\\TPG_P1\\img\\agencia_sm.png"));
+		this.labelFoto.setIcon(new ImageIcon("C:\\Users\\Gamer\\Downloads\\TP Final - recu3\\img\\agencia_sm.png"));
 		this.panel_Foto.add(this.labelFoto);
 		
 		this.panelLoginRegistro = new JPanel();
@@ -160,6 +163,7 @@ public class VentanaLogin extends JFrame implements IVista {
 		this.panel_InputCentrado.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 40));
 		
 		this.inputNombreUsuario = new JTextField();
+		this.inputNombreUsuario.addKeyListener(this);
 		this.inputNombreUsuario.setFont(new Font("Century Gothic", Font.PLAIN, 14));
 		this.inputNombreUsuario.setMargin(new Insets(2, 0, 2, 0));
 		this.inputNombreUsuario.setColumns(10);
@@ -189,11 +193,11 @@ public class VentanaLogin extends JFrame implements IVista {
 		flowLayout.setVgap(40);
 		this.panel_inputContraseña.add(this.panel_InputContraseñaCentrado);
 		
-		this.inputContraseña = new JTextField();
-		this.inputContraseña.setFont(new Font("Century Gothic", Font.PLAIN, 14));
+		this.inputContraseña = new JPasswordField();
+		this.inputContraseña.addKeyListener(this);
+		this.inputContraseña.setPreferredSize(new Dimension(130, 25));
 		this.inputContraseña.setMargin(new Insets(2, 0, 2, 0));
 		this.panel_InputContraseñaCentrado.add(this.inputContraseña);
-		this.inputContraseña.setColumns(10);
 		
 		this.panelBotones = new JPanel();
 		this.panelBotones.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
@@ -217,19 +221,15 @@ public class VentanaLogin extends JFrame implements IVista {
 		this.panelBotones.add(this.panelBotonIniciarSesion);
 		
 		this.btnIniciarSesion = new JButton("Iniciar Sesi\u00F3n");
+		this.btnIniciarSesion.setEnabled(false);
 		this.btnIniciarSesion.setActionCommand("IniciarSes");
 		this.btnIniciarSesion.setFont(new Font("Century Gothic", Font.PLAIN, 16));
 		this.panelBotonIniciarSesion.add(this.btnIniciarSesion);
 	}
 	
 	
-
-	public JTextField getInputContraseña() {
+	public JPasswordField getInputContraseña() {
 		return inputContraseña;
-	}
-
-	public void setInputContraseña(JTextField inputContraseña) {
-		this.inputContraseña = inputContraseña;
 	}
 
 	public JTextField getInputNombreUsuario() {
@@ -250,4 +250,12 @@ public class VentanaLogin extends JFrame implements IVista {
 		this.setVisible(true);
 	}
 
+	public void keyPressed(KeyEvent e) {
+	}
+	public void keyReleased(KeyEvent e) {
+		if (this.inputNombreUsuario.getText().length()>0 && this.inputContraseña.getText().length()>0)
+			this.btnIniciarSesion.setEnabled(true);
+	}
+	public void keyTyped(KeyEvent e) {
+	}
 }

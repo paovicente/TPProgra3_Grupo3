@@ -17,6 +17,10 @@ public class Empleado extends UsuarioInteractivo implements Runnable, Serializab
 		super();
 	}
 	
+	public Elecciones getElecciones() {
+		return elecciones;
+	}
+
 	public Empleado(String nombre, String nombreDeUsuario, String contrasenia,
 			String telefono, int edad)
 	{
@@ -100,7 +104,9 @@ public class Empleado extends UsuarioInteractivo implements Runnable, Serializab
 
 	@Override
 	public String toString() {
-		return super.toString()+" [telefono=" + telefono + ", edad=" + edad + "]";
+		return "Empleado [telefono=" + telefono + ", edad=" + edad + ", ticket=" + ticket + "]";
 	}
+
+	
 
 }

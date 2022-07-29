@@ -4,7 +4,7 @@ public class UsuarioInteractivo extends Usuario
 {
 
 	private int puntaje;
-	private Elecciones elecciones;
+	protected Elecciones elecciones = new Elecciones();
 
 	public UsuarioInteractivo() {
 		super();
@@ -14,7 +14,6 @@ public class UsuarioInteractivo extends Usuario
 	{
 		super(nombre, nombreDeUsuario, contrasenia);
 		this.puntaje = 0;
-		this.elecciones = new Elecciones();
 	}
 
 	public int getPuntaje()
