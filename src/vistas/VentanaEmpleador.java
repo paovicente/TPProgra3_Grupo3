@@ -56,27 +56,13 @@ public class VentanaEmpleador extends JFrame implements IVista {
 	private JPanel panel_infoElecciones;
 	private JPanel panel_textAreaElecciones;
 	private JScrollPane scrollPane;
-	private JPanel panel_cerrarSesion;
+	private JPanel panel_cerrarSesionyGestionTicket;
 	private JPanel panel_btnCerrarSesion;
 	private JButton btn_cerrarSesion;
 	private DefaultListModel<UsuarioInteractivo> modeloLista;
 	private JList<UsuarioInteractivo> list;
-
-	/**
-	 * Launch the application.
-	 */
-	 /* public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaEmpleado frame = new VentanaEmpleado();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	} */
+	private JPanel panelGestionTicket;
+	private JButton btn_GestionarTicket;
 
 	/**
 	 * Create the frame.
@@ -202,23 +188,36 @@ public class VentanaEmpleador extends JFrame implements IVista {
 		this.list.setModel(modeloLista);
 		this.scrollPane.setViewportView(this.list);
 		
-		this.panel_cerrarSesion = new JPanel();
-		this.panel_cerrarSesion.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
-		this.contentPane.add(this.panel_cerrarSesion);
-		this.panel_cerrarSesion.setLayout(new GridLayout(0, 1, 0, 0));
+		this.panel_cerrarSesionyGestionTicket = new JPanel();
+		this.panel_cerrarSesionyGestionTicket.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
+		this.contentPane.add(this.panel_cerrarSesionyGestionTicket);
+		this.panel_cerrarSesionyGestionTicket.setLayout(new GridLayout(0, 2, 0, 0));
 		
 		this.panel_btnCerrarSesion = new JPanel();
 		FlowLayout flowLayout_1 = (FlowLayout) this.panel_btnCerrarSesion.getLayout();
 		flowLayout_1.setHgap(25);
 		flowLayout_1.setVgap(45);
 		this.panel_btnCerrarSesion.setBackground(SystemColor.inactiveCaption);
-		this.panel_cerrarSesion.add(this.panel_btnCerrarSesion);
+		this.panel_cerrarSesionyGestionTicket.add(this.panel_btnCerrarSesion);
 		
 		this.btn_cerrarSesion = new JButton("Cerrar Sesion");
 		this.btn_cerrarSesion.setActionCommand("CerrarSesion");
 		this.btn_cerrarSesion.setPreferredSize(new Dimension(150, 40));
 		this.btn_cerrarSesion.setFont(new Font("Century Gothic", Font.BOLD, 16));
 		this.panel_btnCerrarSesion.add(this.btn_cerrarSesion);
+		
+		this.panelGestionTicket = new JPanel();
+		FlowLayout flowLayout_2 = (FlowLayout) this.panelGestionTicket.getLayout();
+		flowLayout_2.setVgap(45);
+		flowLayout_2.setHgap(25);
+		this.panelGestionTicket.setBackground(SystemColor.inactiveCaption);
+		this.panel_cerrarSesionyGestionTicket.add(this.panelGestionTicket);
+		
+		this.btn_GestionarTicket = new JButton("Gestion Ticket");
+		this.btn_GestionarTicket.setActionCommand("GestionTicket");
+		this.btn_GestionarTicket.setPreferredSize(new Dimension(150, 40));
+		this.btn_GestionarTicket.setFont(new Font("Century Gothic", Font.BOLD, 16));
+		this.panelGestionTicket.add(this.btn_GestionarTicket);
 	}
 	
 	
@@ -241,6 +240,7 @@ public class VentanaEmpleador extends JFrame implements IVista {
 		this.btn_rondaElecciones.addActionListener(actionListener);
 		this.btn_mostrarElecciones.addActionListener(actionListener);
 		this.btn_cerrarSesion.addActionListener(actionListener);
+		this.btn_GestionarTicket.addActionListener(actionListener);
 		this.actionListener=actionListener;
 	}
 

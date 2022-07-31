@@ -36,6 +36,11 @@ public class ListaDelEmpleador extends Lista implements Serializable
 			this.empleados.add(-pos - 1, empleado);
 			this.puntajes.add(-pos - 1, puntaje);
 		}
+		else
+    	{
+			this.empleados.add(pos, empleado);
+			this.puntajes.add(pos, puntaje);
+    	}
 		
 	}
 

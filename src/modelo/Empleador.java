@@ -95,10 +95,9 @@ public class Empleador extends UsuarioInteractivo implements Runnable, Serializa
 		}
 		
 	}
-
 	@Override
 	public String toString() {
-		return super.toString()+"";
+		return "Empleador [tickets=" + tickets + ", persona=" + persona + ", elegido=" + elegido + "]";
 	}
 	
 }

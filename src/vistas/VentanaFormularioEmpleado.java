@@ -507,4 +507,9 @@ public class VentanaFormularioEmpleado extends JFrame implements IVista {
 	public void mostrar() {
 		this.setVisible(true);
 	}
+	
+	public void nuevoComando() {
+		this.btn_Continuar.setText("Finalizar");
+		this.btn_Continuar.setActionCommand("Finalizar");
+	}
 }

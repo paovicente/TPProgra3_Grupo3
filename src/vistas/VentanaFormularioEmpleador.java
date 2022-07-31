@@ -710,4 +710,8 @@ public class VentanaFormularioEmpleador extends JFrame implements IVista {
 		
 	}
 	
+	public void ocultarBotonAgregar() {
+		this.btnFinalizar.setActionCommand("Finalizar");
+		this.btnAgregar.setVisible(false);
+	}
 }
