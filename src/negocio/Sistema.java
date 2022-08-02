@@ -150,8 +150,6 @@ public class Sistema {
 	 * <b>Post: </b>informa si el nombre de usuario ya existe.<br>
 	 * 
 	 * @param nombreDeUsuario: nombre de usuario del usuario que quiere registrarse.
-	 * @param usuarios:        arrayList del tipo de usuario que se quiere
-	 *                         registrar.
 	 * @return: verdadero si el nombre de usuario ya existe, falso si no.
 	 */
 
@@ -176,18 +174,6 @@ public class Sistema {
 			throw new NombreDeUsuarioDuplicadoException(nombreDeUsuario);
 	}
 
-	/*
-	 * public boolean nombreDeUsuarioDuplicado(String nombreDeUsuario) { int i = 0;
-	 * while (i < empleados.size() &&
-	 * !empleados.get(i).getNombreDeUsuario().equals(nombreDeUsuario)) i++;
-	 * 
-	 * if (!(i < empleados.size())) { i = 0; while (i < empleadores.size() &&
-	 * !empleadores.get(i).getNombreDeUsuario().equals(nombreDeUsuario)) i++; if
-	 * (!(i < empleadores.size())) { i = 0; while (i < admins.size() &&
-	 * !admins.get(i).getNombreDeUsuario().equals(nombreDeUsuario)) i++;
-	 * 
-	 * return i < admins.size(); } else return true; } else return true; }
-	 */
 	/**
 	 * Se inicia sesion<br>
 	 * <b>Pre: </b>ningun parametro puede ser null y el usuario ya debe haber sido
@@ -226,7 +212,7 @@ public class Sistema {
 				i = 0;
 				while (i < admins.size() && !nombreDeUsuario.equals(admins.get(i).getNombreDeUsuario()))
 					i++;
-				if (i < admins.size()) // no me caí del arraylist de admin -> encontré nombre de usuario
+				if (i < admins.size()) // no me caï¿½ del arraylist de admin -> encontrï¿½ nombre de usuario
 					if (admins.get(i).getContrasenia().equals(contrasenia)) // login correcto
 						respuesta = admins.get(i);
 					else
@@ -239,7 +225,7 @@ public class Sistema {
 	}
 
 	/**
-	 * Crea un nuevo ticekt Busca Empleado<br>
+	 * Crea un nuevo ticket Busca Empleado<br>
 	 * <b>Pre: </b>ningun parametro puede ser null<br>
 	 * <b>Post: </b> devuelve un Ticket Busca Empleado<br>
 	 * 
@@ -278,22 +264,13 @@ public class Sistema {
 		this.empleados.add(empleado);
 	}
 
-	/*
-	 * public TicketBuscaEmpleado creaTicketBuscaEmpleado(int cantEmp, String
-	 * locacion, String remuneracion, String cargaHoraria, String tipoPuesto, String
-	 * rangoEtario, String experiencia, String estudiosCursados, ArrayList<Double>
-	 * pesos) {
-	 * 
-	 * return new TicketBuscaEmpleado(crearFormulario(locacion, remuneracion,
-	 * cargaHoraria, tipoPuesto, rangoEtario, experiencia, estudiosCursados),
-	 * cantEmp, pesos); }
-	 */
 
 	/**
 	 * Crea un nuevo ticekt Busca Empleo<br>
 	 * <b>Pre: </b>ningun parametro puede ser null<br>
-	 * <b>Post: </b> devuelve un Ticket Busca Empleo<br>
+	 * <b>Post: </b> asigna un Ticket Busca Empleo al empleado<br>
 	 * 
+	 * @param usuario:          empleado al que se le asigna el ticket.
 	 * @param locacion:         locacion del formulario de busqueda.
 	 * @param remuneracion:     remuneracion del formulario de busqueda.
 	 * @param cargaHoraria:     carga horaria del formulario de busqueda.
@@ -316,13 +293,6 @@ public class Sistema {
 		// empleados.add(usuario);
 	}
 
-	/*
-	 * public TicketBuscaEmpleo creaTicketBuscaEmpleo(String locacion, String
-	 * remuneracion, String cargaHoraria, String tipoPuesto, String rangoEtario,
-	 * String experiencia, String estudiosCursados) { return new
-	 * TicketBuscaEmpleo(crearFormulario(locacion, remuneracion, cargaHoraria,
-	 * tipoPuesto, rangoEtario, experiencia, estudiosCursados)); }
-	 */
 
 	/**
 	 * Crea un Formulario de Busqueda<br>
@@ -427,7 +397,7 @@ public class Sistema {
 							&& ((Empleado) this.empleados.get(i)).getTicket().diceEstado().equals("Activo")) { // si
 																												// ambos
 																												// tickets
-																												// estána
+																												// estï¿½na
 																												// ctivos
 						aux = this.calculaCoincidencias((Empleado) empleados.get(i),
 								((Empleador) empleadores.get(j)).getTickets().get(k)); // calculo puntaje
@@ -512,15 +482,15 @@ public class Sistema {
 
 	public void RondaDeEleccionDeUnEmpleador(Empleador empleador, TicketBuscaEmpleado ticket, Empleado empleado) {
 		empleador.getElecciones().agregar(ticket, empleado);
-		int i=0;
-		while (empleador.getTickets().get(i)!=ticket) 
+		int i = 0;
+		while (empleador.getTickets().get(i) != ticket)
 			i++;
-		
-		if (empleador.getTickets().get(i)==ticket) 
-			empleador.getTickets().get(i).getLista().getEmpleados().remove(empleado); //este anda bien!!
-		 else 
-			System.out.println("aquí no deberia entrar"); //provisorio
-		
+
+		if (empleador.getTickets().get(i) == ticket)
+			empleador.getTickets().get(i).getLista().getEmpleados().remove(empleado); // este anda bien!!
+		else
+			System.out.println("aquï¿½ no deberia entrar"); // provisorio
+
 		// System.out.println("Empleador: "+empleador.toString()+"Agregado el ticket"+
 		// ticket.toString() + "del empleado "+ empleado.toString());
 	}
@@ -539,14 +509,13 @@ public class Sistema {
 	 */
 
 	public void RondaDeEleccionDeUnEmpleado(Empleado empleado, TicketBuscaEmpleado ticket, Empleador empleador) {
-		
+
 		if (empleado.getTicket().getLista().getTickets().remove(ticket)) {
 			empleado.getTicket().getLista().getEmpleadores().remove(empleador);
-			System.out.println("Empleador eliminado de lista");    //provisorio
-		}
-		else
-			System.out.println("No debería entrar aquí");          //provisorio
-		
+			System.out.println("Empleador eliminado de lista"); // provisorio
+		} else
+			System.out.println("No deberï¿½a entrar aquï¿½"); // provisorio
+
 		empleado.getElecciones().agregar(ticket, empleador);
 		empleador.setElegido(true);
 	}
@@ -590,7 +559,7 @@ public class Sistema {
 
 			if (!((Empleador) this.empleadores.get(i)).isElegido())
 				this.empleadores.get(i).setPuntaje(this.empleadores.get(i).getPuntaje() - 20); // por no ser elegido por
-																								// ningún empleado
+																								// ningï¿½n empleado
 																								// pretenso resta 20
 																								// puntos
 		}

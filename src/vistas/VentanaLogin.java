@@ -38,14 +38,14 @@ public class VentanaLogin extends JFrame implements IVista, KeyListener {
 	private JPanel panelDatos;
 	private JPanel panelBotones;
 	private JLabel labelNombreUsuario;
-	private JLabel labelContraseña;
+	private JLabel labelContrasenia;
 	private JPanel panel_NombreUsuario;
 	private JPanel panel_inputNombreUsuario;
-	private JPanel panel_Contraseña;
-	private JPanel panel_inputContraseña;
+	private JPanel panel_Contrasenia;
+	private JPanel panel_inputContrasenia;
 	private JPanel panel_InputCentrado;
 	private JTextField inputNombreUsuario;
-	private JPanel panel_InputContraseñaCentrado;
+	private JPanel panel_InputContraseniaCentrado;
 	private JButton btnIniciarSesion;
 	private JPanel panelBotonRegistro;
 	private JPanel panelBotonIniciarSesion;
@@ -55,39 +55,18 @@ public class VentanaLogin extends JFrame implements IVista, KeyListener {
 	private JLabel labelFoto;
 	private JButton btnRegistrarse;
 	private ActionListener actionListener;
-	private JPasswordField inputContraseña;
+	private JPasswordField inputContrasenia;
 	
 	public ActionListener getActionListener() {
 		return actionListener;
 	}
 
-	/*public void setActionListener(ActionListener actionListener) {
-		this.actionListener = actionListener;
-	} */
-
-	
 	public void setActionListener(ActionListener actionlistener) {
 		this.btnIniciarSesion.addActionListener(actionlistener);
         this.btnRegistrarse.addActionListener(actionlistener);
         this.actionListener = actionlistener;
     }
-	
 
-	/**
-	 * Launch the application.
-	 */
-	/* public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaLogin frame = new VentanaLogin();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}  */
 
 	/**
 	 * Create the frame.
@@ -169,35 +148,35 @@ public class VentanaLogin extends JFrame implements IVista, KeyListener {
 		this.inputNombreUsuario.setColumns(10);
 		this.panel_InputCentrado.add(this.inputNombreUsuario);
 		
-		this.panel_Contraseña = new JPanel();
-		this.panel_Contraseña.setBackground(SystemColor.inactiveCaption);
-		this.panel_Contraseña.setBorder(null);
-		this.panelDatos.add(this.panel_Contraseña);
-		this.panel_Contraseña.setLayout(new GridLayout(1, 1, 0, 0));
+		this.panel_Contrasenia = new JPanel();
+		this.panel_Contrasenia.setBackground(SystemColor.inactiveCaption);
+		this.panel_Contrasenia.setBorder(null);
+		this.panelDatos.add(this.panel_Contrasenia);
+		this.panel_Contrasenia.setLayout(new GridLayout(1, 1, 0, 0));
 		
-		this.labelContraseña = new JLabel("Contrase\u00F1a");
-		this.labelContraseña.setBackground(Color.WHITE);
-		this.labelContraseña.setHorizontalAlignment(SwingConstants.CENTER);
-		this.labelContraseña.setFont(new Font("Century Gothic", Font.PLAIN, 20));
-		this.panel_Contraseña.add(this.labelContraseña);
+		this.labelContrasenia = new JLabel("Contrase\u00F1a");
+		this.labelContrasenia.setBackground(Color.WHITE);
+		this.labelContrasenia.setHorizontalAlignment(SwingConstants.CENTER);
+		this.labelContrasenia.setFont(new Font("Century Gothic", Font.PLAIN, 20));
+		this.panel_Contrasenia.add(this.labelContrasenia);
 		
-		this.panel_inputContraseña = new JPanel();
-		this.panel_inputContraseña.setBorder(null);
-		this.panelDatos.add(this.panel_inputContraseña);
-		this.panel_inputContraseña.setLayout(new GridLayout(1, 1, 0, 0));
+		this.panel_inputContrasenia = new JPanel();
+		this.panel_inputContrasenia.setBorder(null);
+		this.panelDatos.add(this.panel_inputContrasenia);
+		this.panel_inputContrasenia.setLayout(new GridLayout(1, 1, 0, 0));
 		
-		this.panel_InputContraseñaCentrado = new JPanel();
-		this.panel_InputContraseñaCentrado.setBackground(SystemColor.inactiveCaption);
-		FlowLayout flowLayout = (FlowLayout) this.panel_InputContraseñaCentrado.getLayout();
+		this.panel_InputContraseniaCentrado = new JPanel();
+		this.panel_InputContraseniaCentrado.setBackground(SystemColor.inactiveCaption);
+		FlowLayout flowLayout = (FlowLayout) this.panel_InputContraseniaCentrado.getLayout();
 		flowLayout.setHgap(0);
 		flowLayout.setVgap(40);
-		this.panel_inputContraseña.add(this.panel_InputContraseñaCentrado);
+		this.panel_inputContrasenia.add(this.panel_InputContraseniaCentrado);
 		
-		this.inputContraseña = new JPasswordField();
-		this.inputContraseña.addKeyListener(this);
-		this.inputContraseña.setPreferredSize(new Dimension(130, 25));
-		this.inputContraseña.setMargin(new Insets(2, 0, 2, 0));
-		this.panel_InputContraseñaCentrado.add(this.inputContraseña);
+		this.inputContrasenia = new JPasswordField();
+		this.inputContrasenia.addKeyListener(this);
+		this.inputContrasenia.setPreferredSize(new Dimension(130, 25));
+		this.inputContrasenia.setMargin(new Insets(2, 0, 2, 0));
+		this.panel_InputContraseniaCentrado.add(this.inputContrasenia);
 		
 		this.panelBotones = new JPanel();
 		this.panelBotones.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
@@ -228,8 +207,8 @@ public class VentanaLogin extends JFrame implements IVista, KeyListener {
 	}
 	
 	
-	public JPasswordField getInputContraseña() {
-		return inputContraseña;
+	public JPasswordField getInputContrasenia() {
+		return inputContrasenia;
 	}
 
 	public JTextField getInputNombreUsuario() {
@@ -253,7 +232,7 @@ public class VentanaLogin extends JFrame implements IVista, KeyListener {
 	public void keyPressed(KeyEvent e) {
 	}
 	public void keyReleased(KeyEvent e) {
-		if (this.inputNombreUsuario.getText().length()>0 && this.inputContraseña.getText().length()>0)
+		if (this.inputNombreUsuario.getText().length()>0 && this.inputContrasenia.getText().length()>0)
 			this.btnIniciarSesion.setEnabled(true);
 	}
 	public void keyTyped(KeyEvent e) {

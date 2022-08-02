@@ -107,7 +107,7 @@ public class Controlador implements ActionListener
 			try
 			{
 				usuario = sistema.login(ventLog.getInputNombreUsuario().getText(),
-						ventLog.getInputContraseña().getText());
+						ventLog.getInputContrasenia().getText());
 				System.out.println("Codigo de usuario:" + usuario.getCodUsuario());
 
 				if (usuario.getCodUsuario() == 1)
@@ -130,7 +130,7 @@ public class Controlador implements ActionListener
 				this.setVista(new VentanaLogin());
 			} catch (ContraseniaIncorrectaException ex1)
 			{
-				JOptionPane.showMessageDialog(null, "Contraseña incorrecta"); //Aquí consideramos que no sería correcto que mostrase la contraseña
+				JOptionPane.showMessageDialog(null, "Contrasenia incorrecta"); //Aquí consideramos que no sería correcto que mostrase la contrasenia
 				this.vista.cerrar();
 				this.setVista(new VentanaLogin());
 			}
@@ -199,7 +199,7 @@ public class Controlador implements ActionListener
 					this.setVista(new VentanaFormularioEmpleado());
 				} catch (NumberFormatException e1)
 				{ 
-					JOptionPane.showMessageDialog(null, "Edad inválida");
+					JOptionPane.showMessageDialog(null, "Edad invï¿½lida");
 			} 
 			}
 			// usuario = new
@@ -213,7 +213,7 @@ public class Controlador implements ActionListener
 				usuario = sistema.registroAdmin(ventRegAdmin.getInput_Nombre().getText(), this.nombreUsuario,this.contrasenia);
 				sistema.agregarAdmin((AdminAgencia) usuario);
 				this.vista.cerrar();
-				JOptionPane.showMessageDialog(null, "¡Registro de ADMIN exitoso!");
+				JOptionPane.showMessageDialog(null, "ï¿½Registro de ADMIN exitoso!");
 				this.setVista(new VentanaLogin());
 			} catch (NombreDeUsuarioDuplicadoException e1)
 			{
@@ -232,7 +232,7 @@ public class Controlador implements ActionListener
 			//------------------//
 			*/
 				
-			JOptionPane.showMessageDialog(null, "¡Registro de empleado exitoso!");
+			JOptionPane.showMessageDialog(null, "ï¿½Registro de empleado exitoso!");
 			this.vista.cerrar();
 			this.setVista(new VentanaLogin());
 			} catch (FormularioIncompletoException e1) {
@@ -243,7 +243,7 @@ public class Controlador implements ActionListener
 			try {
 				ticketEmpleador(ventFormEmpleador);
 				this.vista.cerrar();
-				JOptionPane.showMessageDialog(null,"¡Ticket agregado correctamente! \n Presione agregar para seguir agregando tickets o presione finalizar para culminar el registro");
+				JOptionPane.showMessageDialog(null,"ï¿½Ticket agregado correctamente! \n Presione agregar para seguir agregando tickets o presione finalizar para culminar el registro");
 				this.setVista(new VentanaFormularioEmpleador());
 			} catch (NumberFormatException | FormularioIncompletoException e1) {
 				JOptionPane.showMessageDialog(null, "Todos los aspectos del formulario deben estar completos.");
@@ -251,7 +251,7 @@ public class Controlador implements ActionListener
 		} else if (comando.equalsIgnoreCase("FinalizarRegistroEmpleador")){
 			sistema.agregarEmpleador((Empleador) usuario);
 			this.vista.cerrar();
-			JOptionPane.showMessageDialog(null, "¡Registro de empleador exitoso!");
+			JOptionPane.showMessageDialog(null, "ï¿½Registro de empleador exitoso!");
 			this.setVista(new VentanaLogin());
 		} else if (comando.equalsIgnoreCase("IniciarRondaEncuentros")){
 			sistema.RondaDeEncuentrosLaborales();
@@ -295,7 +295,7 @@ public class Controlador implements ActionListener
 			Empleado empleado = (Empleado) usuario;
 
 			if (empleado.getTicket().getLista().getEmpleadores().isEmpty())
-				JOptionPane.showMessageDialog(null, "La ronda de encuentros aún no se ha realizado");
+				JOptionPane.showMessageDialog(null, "La ronda de encuentros aï¿½n no se ha realizado");
 			 else{
 				this.vista.cerrar();
 				this.setVista(new VentanaElecciones());
@@ -311,7 +311,7 @@ public class Controlador implements ActionListener
 			Empleado empleado = (Empleado) usuario;
 			VentanaEmpleado ventEmpleado = (VentanaEmpleado) this.vista;
 			if (empleado.getElecciones().getEmps().isEmpty())
-				JOptionPane.showMessageDialog(null, "No has realizado ninguna elección!");
+				JOptionPane.showMessageDialog(null, "No has realizado ninguna elecciï¿½n!");
 			 else {
 				 Iterator<UsuarioInteractivo> iteradorNombres = empleado.getElecciones().getEmps().iterator();
 				 Iterator<TicketBuscaEmpleado> iterador = empleado.getElecciones().getTickets().iterator();
@@ -337,7 +337,7 @@ public class Controlador implements ActionListener
 			ListaDelEmpleador lista = this.ticketEmpleador.getLista();
 			
 			if (lista.getEmpleados().isEmpty()) {
-				JOptionPane.showMessageDialog(null, "La ronda de encuentros aún no se ha ejecutado");
+				JOptionPane.showMessageDialog(null, "La ronda de encuentros aï¿½n no se ha ejecutado");
 				this.vista.cerrar();
 				this.setVista(new VentanaEmpleador());
 			} else {
@@ -370,7 +370,7 @@ public class Controlador implements ActionListener
 			VentanaEmpleador ventEmpleador = (VentanaEmpleador) vista;
 			Empleador empleador = (Empleador) usuario;
 			if (empleador.getElecciones().getEmps().isEmpty())
-				JOptionPane.showMessageDialog(null, "No has realizado ninguna elección!");
+				JOptionPane.showMessageDialog(null, "No has realizado ninguna elecciï¿½n!");
 			else {
 			Iterator<UsuarioInteractivo> iterador = empleador.getElecciones().getEmps().iterator();
 
@@ -658,8 +658,8 @@ public class Controlador implements ActionListener
 			formulario = empleador.getTickets().get(num).getFormulario();
 		}
 		
-		String[] opcionesModificar = {"Carga Horaria", "Estudios Cursados", "Experiencia","Locación","Rango Etario","Remuneración","Tipo de Puesto"};
-		int i = JOptionPane.showOptionDialog(null, "¿Qué elemento deseas modificar?", "Clickea una opcion", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcionesModificar, opcionesModificar[0])+1;
+		String[] opcionesModificar = {"Carga Horaria", "Estudios Cursados", "Experiencia","Locaciï¿½n","Rango Etario","Remuneraciï¿½n","Tipo de Puesto"};
+		int i = JOptionPane.showOptionDialog(null, "ï¿½Quï¿½ elemento deseas modificar?", "Clickea una opcion", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcionesModificar, opcionesModificar[0])+1;
 	
 		int eleccion;
 		
@@ -763,7 +763,7 @@ public class Controlador implements ActionListener
 			break;
 		case 6:
 			String[] opciones1 = {"V1", "V2", "V3"};
-			eleccion  = JOptionPane.showOptionDialog(null, "Elija una remuneración", "Clickea una opcion", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opciones1, opciones1[0])+1;
+			eleccion  = JOptionPane.showOptionDialog(null, "Elija una remuneraciï¿½n", "Clickea una opcion", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opciones1, opciones1[0])+1;
 			
 			switch (eleccion)
 			{
@@ -815,9 +815,9 @@ public class Controlador implements ActionListener
 		}
 	}
 	
-	private void activarTicket(Usuario u) { //verificar q no esté activo
+	private void activarTicket(Usuario u) { //verificar q no estï¿½ activo
 		Ticket ticket;
-		if (usuario.getCodUsuario()==1) {	//empleado. verificar q no esté activo
+		if (usuario.getCodUsuario()==1) {	//empleado. verificar q no estï¿½ activo
 			Empleado empleado = (Empleado) u;
 			ticket = empleado.getTicket();
 			ticket.setEstado(new ActivoState(ticket));
