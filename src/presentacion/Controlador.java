@@ -130,7 +130,7 @@ public class Controlador implements ActionListener
 				this.setVista(new VentanaLogin());
 			} catch (ContraseniaIncorrectaException ex1)
 			{
-				JOptionPane.showMessageDialog(null, "Contrasenia incorrecta"); //Aquí consideramos que no sería correcto que mostrase la contrasenia
+				JOptionPane.showMessageDialog(null, "Contraseï¿½a incorrecta"); //Aquï¿½ consideramos que no serï¿½a correcto que mostrase la contraseï¿½a
 				this.vista.cerrar();
 				this.setVista(new VentanaLogin());
 			}
