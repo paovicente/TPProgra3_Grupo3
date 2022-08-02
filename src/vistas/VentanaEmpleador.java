@@ -134,6 +134,7 @@ public class VentanaEmpleador extends JFrame implements IVista {
 		this.panel_AgregarEmpleador.add(this.panel_btnAgregarEmpleador);
 		
 		this.btn_agregarEmpleador = new JButton("Agregar");
+		this.btn_agregarEmpleador.setActionCommand("AgregarEmpleador");
 		this.btn_agregarEmpleador.setMargin(new Insets(15, 30, 15, 30));
 		this.btn_agregarEmpleador.setFont(new Font("Century Gothic", Font.BOLD, 16));
 		this.panel_btnAgregarEmpleador.add(this.btn_agregarEmpleador);

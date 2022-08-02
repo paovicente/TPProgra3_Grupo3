@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 import modelo.ActivoState;
@@ -17,6 +18,7 @@ import modelo.Empleado;
 import modelo.Empleador;
 import modelo.Entre40y50;
 import modelo.FormularioDeBusqueda;
+import modelo.FormularioIncompletoException;
 import modelo.HomeOffice;
 import modelo.Indistinto;
 import modelo.Junior;
@@ -59,7 +61,7 @@ import vistas.VentanaRegistroEmpleado;
 import vistas.VentanaRegistroEmpleador;
 
 public class Controlador implements ActionListener
-{ // es correcto que el controlador cree (haga el new de) los objetos????
+{
 
 	private IVista vista;
 	private Usuario usuario;
@@ -113,16 +115,22 @@ public class Controlador implements ActionListener
 					this.setVista(new VentanaEmpleado());
 				} else if (usuario.getCodUsuario() == 2)
 					this.setVista(new VentanaEmpleador());
-				else if (usuario.getCodUsuario() == 3)
+				else if (usuario.getCodUsuario() == 3) {				
 					this.setVista(new VentanaAgencia());
+					VentanaAgencia ventAgencia = (VentanaAgencia) this.vista;
+					if (sistema.getEmpleados().isEmpty() || sistema.getEmpleadores().isEmpty()) {
+						ventAgencia.getBtn_RondaEncuentros().setEnabled(false);
+						ventAgencia.getBtn_RondaContrataciones().setEnabled(false);
+					}			
+				}
 			} catch (NombreIncorrectoException ex)
 			{
-				JOptionPane.showMessageDialog(null, "Nombre de usuario incorrecto");
+				JOptionPane.showMessageDialog(null, "Nombre de usuario "+ ex.getNombreDeUsuario()+ " incorrecto");
 				this.vista.cerrar();
 				this.setVista(new VentanaLogin());
 			} catch (ContraseniaIncorrectaException ex1)
 			{
-				JOptionPane.showMessageDialog(null, "Contraseña incorrecta");
+				JOptionPane.showMessageDialog(null, "Contraseña incorrecta"); //Aquí consideramos que no sería correcto que mostrase la contraseña
 				this.vista.cerrar();
 				this.setVista(new VentanaLogin());
 			}
@@ -133,17 +141,20 @@ public class Controlador implements ActionListener
 			String rubro;
 			if (ventRegEmpleador.getRadioButtonFisica().isSelected())
 				persona = "Fisica";
-			else
+			else if (ventRegEmpleador.getRdbtnJuridica().isSelected())
 				persona = "Juridica";
+			else
+				persona = null;
 
 			if (ventRegEmpleador.getRadioButtonSalud().isSelected())
 				rubro = "Salud";
 			else if (ventRegEmpleador.getRadioButtonComercioLocal().isSelected())
-				rubro = "ComercioLocal";
-			else
+				rubro = "ComercioNacional";
+			else if (ventRegEmpleador.getRadioButtonComercioInternacional().isSelected())
 				rubro = "ComercioInternacional";
+			else
+				rubro = null;
 
-			// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 			
 				usuario = sistema.registroEmpleador(ventRegEmpleador.getInputNombreEmpleador().getText(),
 						this.nombreUsuario, this.contrasenia, persona, rubro);
@@ -168,27 +179,29 @@ public class Controlador implements ActionListener
 				}
 	
 			} catch (NombreDeUsuarioDuplicadoException e2) {
-				JOptionPane.showMessageDialog(null, "Nombre de usuario existente");
+				JOptionPane.showMessageDialog(null, "Nombre de usuario "+ e2.getNombreDeUsuario()+ " existente");
 			}
 			this.contrasenia = ventReg.getPasswordField().getText();
-			
-		
-			
 		} else if (comando.equalsIgnoreCase("RegistrarseEmpleado"))
 		{
 			VentanaRegistroEmpleado ventRegEmpleado = (VentanaRegistroEmpleado) vista;
+			int edad=0;
+			if (Integer.parseInt(ventRegEmpleado.getInput_Edad().getText())<0) {
+				JOptionPane.showMessageDialog(null, "La edad debe ser mayor a 0");
+			} else {
 
-			// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-			try
-			{
-				usuario = sistema.registroEmpleado(ventRegEmpleado.getInput_Nombre().getText(), this.nombreUsuario,this.contrasenia, ventRegEmpleado.getInput_Telefono().getText(),
-						Integer.parseInt(ventRegEmpleado.getInput_Edad().getText()));
-				this.vista.cerrar();
-				this.setVista(new VentanaFormularioEmpleado());
-			} catch (NumberFormatException e1)
-			{ 
-				JOptionPane.showMessageDialog(null, "Edad inválida");
+				// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+				try
+				{
+					usuario = sistema.registroEmpleado(ventRegEmpleado.getInput_Nombre().getText(), this.nombreUsuario,this.contrasenia, ventRegEmpleado.getInput_Telefono().getText(),
+							Integer.parseInt(ventRegEmpleado.getInput_Edad().getText()));
+					this.vista.cerrar();
+					this.setVista(new VentanaFormularioEmpleado());
+				} catch (NumberFormatException e1)
+				{ 
+					JOptionPane.showMessageDialog(null, "Edad inválida");
 			} 
+			}
 			// usuario = new
 			// Empleado(ventRegEmpleado.getInput_Nombre().getText(),this.nombreUsuario,this.contrasenia,ventRegEmpleado.getInput_Telefono().getText(),Integer.parseInt(ventRegEmpleado.getInput_Edad().getText()));
 
@@ -204,122 +217,117 @@ public class Controlador implements ActionListener
 				this.setVista(new VentanaLogin());
 			} catch (NombreDeUsuarioDuplicadoException e1)
 			{
-				JOptionPane.showMessageDialog(null, "Nombre de usuario existente");
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Nombre de usuario "+ e1.getNombreDeUsuario()+ " existente");
 			}
-			
-			
-
-		} else if (comando.equalsIgnoreCase("ContinuarRegEmpleado"))
-		{
+		} else if (comando.equalsIgnoreCase("ContinuarRegEmpleado")){
 			VentanaFormularioEmpleado ventFormEmpleado = (VentanaFormularioEmpleado) vista;
-			ticketEmpleado(ventFormEmpleado);
-			sistema.agregarEmpleado((Empleado)usuario);
+			try {
+				this.ticketEmpleado(ventFormEmpleado);
+				sistema.agregarEmpleado((Empleado)usuario);
+				
+			/*
+			//------test muestra-----------//
+			Empleado empleado = (Empleado) usuario;
+			System.out.println("Formulario del registro: "+empleado.getTicket().getFormulario().toString());
+			//------------------//
+			*/
+				
 			JOptionPane.showMessageDialog(null, "¡Registro de empleado exitoso!");
 			this.vista.cerrar();
 			this.setVista(new VentanaLogin());
-
-		} else if (comando.equalsIgnoreCase("AgregarTicketEmpleador"))
-		{
+			} catch (FormularioIncompletoException e1) {
+				JOptionPane.showMessageDialog(null, "Todos los aspectos del formulario deben estar completos.");
+			}			
+		} else if (comando.equalsIgnoreCase("AgregarTicketEmpleador")){
 			VentanaFormularioEmpleador ventFormEmpleador = (VentanaFormularioEmpleador) vista;
-			ticketEmpleador(ventFormEmpleador);
-			
-			this.vista.cerrar();
-			JOptionPane.showMessageDialog(null,
-					"¡Ticket agregado correctamente! \n Presione agregar para seguir agregando tickets o presione finalizar para culminar el registro");
-			this.setVista(new VentanaFormularioEmpleador());
-
-		} else if (comando.equalsIgnoreCase("FinalizarRegistroEmpleador"))
-		{
+			try {
+				ticketEmpleador(ventFormEmpleador);
+				this.vista.cerrar();
+				JOptionPane.showMessageDialog(null,"¡Ticket agregado correctamente! \n Presione agregar para seguir agregando tickets o presione finalizar para culminar el registro");
+				this.setVista(new VentanaFormularioEmpleador());
+			} catch (NumberFormatException | FormularioIncompletoException e1) {
+				JOptionPane.showMessageDialog(null, "Todos los aspectos del formulario deben estar completos.");
+			}
+		} else if (comando.equalsIgnoreCase("FinalizarRegistroEmpleador")){
 			sistema.agregarEmpleador((Empleador) usuario);
 			this.vista.cerrar();
 			JOptionPane.showMessageDialog(null, "¡Registro de empleador exitoso!");
 			this.setVista(new VentanaLogin());
-		} else if (comando.equalsIgnoreCase("IniciarRondaEncuentros"))
-		{
+		} else if (comando.equalsIgnoreCase("IniciarRondaEncuentros")){
 			sistema.RondaDeEncuentrosLaborales();
 			this.vista.cerrar();
 			JOptionPane.showMessageDialog(null, "Realizando ronda de encuentros laborales...");
-			this.setVista(new VentanaAgencia()); // abrir ventana de admin y poner boton de deslogueo. setear atributo
-													// usuario = null en controlador
-		} else if (comando.equalsIgnoreCase("AgregarAdmin"))
-		{
+			this.setVista(new VentanaAgencia()); 
+		} else if (comando.equalsIgnoreCase("AgregarAdmin")){
+			this.vista.cerrar();
 			this.setVista(new VentanaRegistro());
-		} else if (comando.equalsIgnoreCase("MostrarEmpleados"))
-		{ // deshabilitar boton luego de esto, sino va a seguir agregando si se vuelve a
+			VentanaRegistro ventReg = (VentanaRegistro) this.vista;
+			ventReg.getRdbtn_opcionAdmin().setSelected(true);
+		} else if (comando.equalsIgnoreCase("MostrarEmpleados")){ 
 			// apretar y no deberia
 			VentanaAgencia ventAgencia = (VentanaAgencia) this.vista;
 			ventAgencia.getListEmpleados();
+			Object objeto = e.getSource();
+			JButton boton = (JButton) objeto;
+			boton.setEnabled(false);
 			ArrayList<UsuarioInteractivo> empleados = sistema.getEmpleados();
 			Iterator<UsuarioInteractivo> iterador = empleados.iterator();
 
-			while (iterador.hasNext())
-			{
+			while (iterador.hasNext()){
 				ventAgencia.getModeloListaEmpleados().addElement(iterador.next());
 			}
 			ventAgencia.repaint();
-		} else if (comando.equalsIgnoreCase("MostrarEmpleadores"))
-		{ // deshabilitar boton luego de esto sino va a seguir agregando si se vuelve a
-			// apretar y no deberia
+		} else if (comando.equalsIgnoreCase("MostrarEmpleadores")){ 
 			VentanaAgencia ventAgencia = (VentanaAgencia) this.vista;
 			ventAgencia.getListEmpleadores();
+			Object objeto = e.getSource();
+			JButton boton = (JButton) objeto;
+			boton.setEnabled(false);
 			ArrayList<UsuarioInteractivo> empleadores = sistema.getEmpleadores();
 			Iterator<UsuarioInteractivo> iterador = empleadores.iterator();
 
 			while (iterador.hasNext())
 			{
-				ventAgencia.getModeloListaEmpleadores().addElement(iterador.next()); // agrego empleadores, ver como
-																						// mostrar el ToString
+				ventAgencia.getModeloListaEmpleadores().addElement(iterador.next()); 
 			}
 			ventAgencia.repaint();
-		} else if (comando.equalsIgnoreCase("IniciarEleccionesEmpleado"))
-		{
+		} else if (comando.equalsIgnoreCase("IniciarEleccionesEmpleado")){
 			Empleado empleado = (Empleado) usuario;
 
-			if (empleado.getTicket().getLista() == null)
-			{
+			if (empleado.getTicket().getLista().getEmpleadores().isEmpty())
 				JOptionPane.showMessageDialog(null, "La ronda de encuentros aún no se ha realizado");
-			} else
-			{
+			 else{
 				this.vista.cerrar();
 				this.setVista(new VentanaElecciones());
 				VentanaElecciones ventElecciones = (VentanaElecciones) vista;
 				ListaDelEmpleado lista = empleado.getTicket().getLista();
-
 				for (int i = 0; i < lista.getTickets().size(); i++)
-				{ // anda mal, mete un solo ticket cuando deberia haber varios..... posibles
-					// errores: generacion lista empleado, generacion formulario empleador, forma de
-					// agregar
-					ventElecciones.getModeloLista().addElement(lista.getTickets().get(i)); // muestro tickets.... ver
-																							// como mejorar esto.
-																							// deberia mostrar ticket y
-																							// empleador. yo haria otra
-																							// ventana con 3 listas de
-																							// columna (puntaje,
-																							// empleador/empleado y
-																							// ticket).
+				{ 
+					ventElecciones.getModeloLista().addElement(lista.getTickets().get(i));
 				}
 				ventElecciones.repaint();
 			}
-		} else if (comando.equalsIgnoreCase("MostrarEleccionesEmpleado"))
-		{
-			// VentanaEmpleado ventEmpleado = (VentanaEmpleado) this.vista;
-			// ventEmpleado.getListEleccionesEmpleado();
-
+		} else if (comando.equalsIgnoreCase("MostrarEleccionesEmpleado")){	
 			Empleado empleado = (Empleado) usuario;
 			VentanaEmpleado ventEmpleado = (VentanaEmpleado) this.vista;
-			Iterator<UsuarioInteractivo> iterador = empleado.getElecciones().getEmps().iterator();
-
-			while (iterador.hasNext())
-			{
-				ventEmpleado.getModeloLista().addElement(iterador.next()); // solo estoy mostrando el empleador, deberia
-																			// quizas mostrar tambien el ticket
-			}
-
-			// aaaaaaaaaaaaaa aca no se q va
-			ventEmpleado.repaint();
-		} else if (comando.equalsIgnoreCase("SeguirTicketEmpleador"))
-		{ // despues muestro la lista de empleadores para dicho ticket
+			if (empleado.getElecciones().getEmps().isEmpty())
+				JOptionPane.showMessageDialog(null, "No has realizado ninguna elección!");
+			 else {
+				 Iterator<UsuarioInteractivo> iteradorNombres = empleado.getElecciones().getEmps().iterator();
+				 Iterator<TicketBuscaEmpleado> iterador = empleado.getElecciones().getTickets().iterator();
+				//Iterator<UsuarioInteractivo> iterador = empleado.getElecciones().getEmps().iterator();
+				 while (iteradorNombres.hasNext()) {
+					 ventEmpleado.getModeloListaNombres().addElement(iteradorNombres.next().getNombre());
+				 }				 				 
+				while (iterador.hasNext())
+					ventEmpleado.getModeloLista().addElement(iterador.next());
+					//ventEmpleado.getModeloLista().addElement(iterador.next());
+				ventEmpleado.repaint();
+				Object objeto = e.getSource();
+				JButton boton = (JButton) objeto;
+				boton.setEnabled(false);	
+			}		
+		} else if (comando.equalsIgnoreCase("SeguirTicketEmpleador")){ 
 			VentanaEleccionesTicketEmpleador ventElecciones = (VentanaEleccionesTicketEmpleador) vista;
 			this.ticketEmpleador = (TicketBuscaEmpleado) ventElecciones.getList().getSelectedValue();
 			this.vista.cerrar();
@@ -327,22 +335,24 @@ public class Controlador implements ActionListener
 			Empleador empleador = (Empleador) usuario; // creo que no es necesario
 			VentanaElecciones ventElecciones1 = (VentanaElecciones) vista;
 			ListaDelEmpleador lista = this.ticketEmpleador.getLista();
-
-			for (int i = 0; i < lista.getEmpleados().size(); i++)
-			{
-				ventElecciones1.getModeloLista().addElement(lista.getEmpleados().get(i)); // muestro empleados
-				// ventElecciones1.getModeloLista().addElement(lista.getTickets().get(i));
+			
+			if (lista.getEmpleados().isEmpty()) {
+				JOptionPane.showMessageDialog(null, "La ronda de encuentros aún no se ha ejecutado");
+				this.vista.cerrar();
+				this.setVista(new VentanaEmpleador());
+			} else {
+				for (int i = 0; i < lista.getEmpleados().size(); i++)
+				{
+					ventElecciones1.getModeloLista().addElement(lista.getEmpleados().get(i)); // muestro empleados
+				}
 			}
-
-		} else if (comando.equalsIgnoreCase("IniciarEleccionesEmpleador"))
-		{ // primero muestro para que el empleador elija un ticket
+				
+		} else if (comando.equalsIgnoreCase("IniciarEleccionesEmpleador")){ // primero muestro para que el empleador elija un ticket
 			Empleador empleador = (Empleador) usuario;
 
-			if (empleador.getTickets().isEmpty())
-			{
+			if (empleador.getTickets().isEmpty())	
 				JOptionPane.showMessageDialog(null, "No tenes tickets");
-			} else
-			{
+			else{
 				this.vista.cerrar();
 				this.setVista(new VentanaEleccionesTicketEmpleador());
 				VentanaEleccionesTicketEmpleador ventElecciones = (VentanaEleccionesTicketEmpleador) vista;
@@ -359,53 +369,43 @@ public class Controlador implements ActionListener
 		{
 			VentanaEmpleador ventEmpleador = (VentanaEmpleador) vista;
 			Empleador empleador = (Empleador) usuario;
+			if (empleador.getElecciones().getEmps().isEmpty())
+				JOptionPane.showMessageDialog(null, "No has realizado ninguna elección!");
+			else {
 			Iterator<UsuarioInteractivo> iterador = empleador.getElecciones().getEmps().iterator();
 
 			while (iterador.hasNext())
 			{
-				ventEmpleador.getModeloLista().addElement(iterador.next()); // solo estoy mostrando el empleado, deberia
-																			// quizas mostrar tambien el ticket con el
-																			// que lo contraté?
+				ventEmpleador.getModeloLista().addElement(iterador.next());
 			}
+			ventEmpleador.repaint();
+			Object objeto = e.getSource();
+			JButton boton = (JButton) objeto;
+			boton.setEnabled(false);}
 
-		} else if (comando.equalsIgnoreCase("AgregarALista"))
-		{
+		} else if (comando.equalsIgnoreCase("AgregarALista")){
 			VentanaElecciones ventElecciones = (VentanaElecciones) vista;
-
-			// esta validacion es porque usamos una misma ventana tanto para empleadores
-			// como para empleadores, podria no estar si hacemos una ventana para cada
-			// clase, pero no sé que conviene
-			if (usuario.getCodUsuario() == 1)
-			{
+			if (usuario.getCodUsuario() == 1){
 				Empleado empleado = (Empleado) usuario;
-				int indice = ventElecciones.getList().getSelectedIndex(); // devuelve el indice del arraylist de ticket,
-																			// asi puedo acceder tanto al empleador como
-																			// al ticket (ver ListaDelEmpleado). ¿restar
-																			// 1?
-				sistema.RondaDeEleccionDeUnEmpleado(empleado, empleado.getTicket().getLista().getTickets().get(indice),
-						empleado.getTicket().getLista().getEmpleadores().get(indice));
+				int indice = ventElecciones.getList().getSelectedIndex(); 
+				//System.out.println("Indice: "+ indice +" Empleador: "+ empleado.getTicket().getLista().getEmpleadores().get(indice).getNombre() +" Ticket: " + empleado.getTicket().getLista().getTickets().get(indice));
+				sistema.RondaDeEleccionDeUnEmpleado(empleado, empleado.getTicket().getLista().getTickets().get(indice),empleado.getTicket().getLista().getEmpleadores().get(indice));
 				JOptionPane.showMessageDialog(null, "Empleador agregado correctamente");
 				this.vista.cerrar();
 				this.setVista(new VentanaEmpleado());
-
-			} else if (usuario.getCodUsuario() == 2)
-			{
+			} else if (usuario.getCodUsuario() == 2){
 				sistema.RondaDeEleccionDeUnEmpleador((Empleador) usuario, ticketEmpleador,
 						(Empleado) ventElecciones.getList().getSelectedValue());
 				JOptionPane.showMessageDialog(null, "Empleado agregado correctamente");
 				this.vista.cerrar();
 				this.setVista(new VentanaEmpleador());
 			}
-
-		} else if (comando.equalsIgnoreCase("IniciarContrataciones"))
-		{
-			
+		} else if (comando.equalsIgnoreCase("IniciarContrataciones")){
 			sistema.RondaDeContrataciones();
 			this.vista.cerrar();
 			JOptionPane.showMessageDialog(null, "Realizando ronda de contrataciones...");
 			this.setVista(new VentanaAgencia());
-		} else if (comando.equalsIgnoreCase("CerrarSesion"))
-		{
+		} else if (comando.equalsIgnoreCase("CerrarSesion")){
 			this.vista.cerrar();
 			this.usuario = null;
 			this.setVista(new VentanaLogin());
@@ -436,16 +436,60 @@ public class Controlador implements ActionListener
 			activarTicket(usuario);
 			this.setVista(this.usuario.getCodUsuario()==1?new VentanaEmpleado():new VentanaEmpleador());
 		}else if(comando.equalsIgnoreCase("Finalizar")){
-			JOptionPane.showMessageDialog(null, "Ticket dado de alta correctamente");
+			if (usuario.getCodUsuario() == 1) {
+				try {
+					ticketEmpleado((VentanaFormularioEmpleado) this.vista);
+					JOptionPane.showMessageDialog(null, "Ticket dado de alta correctamente");
+					this.vista.cerrar();
+					this.setVista(new VentanaEmpleado());
+				} catch (FormularioIncompletoException e1) {
+					JOptionPane.showMessageDialog(null, "Todos los aspectos del formulario deben estar completos");
+				}
+				
+				
+				/*
+				//---------test muestra-----------//
+				Empleado empleado = (Empleado) usuario;
+				System.out.println("Formulario luego del alta:" + empleado.getTicket().getFormulario().toString());
+				//--------------------//
+				*/	
+				
+			}
+			else if (usuario.getCodUsuario() == 2) {				
+				try {
+					this.ticketEmpleador((VentanaFormularioEmpleador) this.vista);
+					JOptionPane.showMessageDialog(null, "Ticket dado de alta correctamente");
+					this.vista.cerrar();
+					this.setVista(new VentanaEmpleador());
+				} catch (NumberFormatException | FormularioIncompletoException e1) {
+					JOptionPane.showMessageDialog(null, "Todos los aspectos del formulario deben estar completos");
+				}
+				
+				
+				/*
+				//---------------test muestra---------------------//
+				 Empleador empleador = (Empleador) usuario;
+				Iterator<TicketBuscaEmpleado> iterador = empleador.getTickets().iterator();
+				while (iterador.hasNext()) 
+					System.out.println("Formulario:"+ iterador.next().getFormulario().toString());
+				//------------------------------------//
+				*/			
+				
+			}
+		} else if (comando.equalsIgnoreCase("AgregarEmpleado")) {
 			this.vista.cerrar();
-			if (usuario.getCodUsuario() == 1)
-				this.setVista(new VentanaEmpleado());
-			else if (usuario.getCodUsuario() == 2)
-				this.setVista(new VentanaEmpleador());
+			this.setVista(new VentanaRegistro());
+			VentanaRegistro ventReg = (VentanaRegistro) this.vista;
+			ventReg.getRdbtn_opcionEmpleado().setSelected(true);
+		} else if (comando.equalsIgnoreCase("AgregarEmpleador")) {
+			this.vista.cerrar();
+			this.setVista(new VentanaRegistro());
+			VentanaRegistro ventReg = (VentanaRegistro) this.vista;
+			ventReg.getRdbtn_opcionEmpleador().setSelected(true);	
 		}
 }
 	
-	private void ticketEmpleador(VentanaFormularioEmpleador ventFormEmpleador) {
+	private void ticketEmpleador(VentanaFormularioEmpleador ventFormEmpleador) throws NumberFormatException, FormularioIncompletoException {
 		String cargaHoraria;
 		String estudiosCursados;
 		String experiencia;
@@ -458,50 +502,61 @@ public class Controlador implements ActionListener
 			cargaHoraria = "CargaCompleta";
 		else if (ventFormEmpleador.getRdbtnExtendida().isSelected())
 			cargaHoraria = "CargaExtendida";
-		else
+		else if (ventFormEmpleador.getRdbtnMedia().isSelected())
 			cargaHoraria = "CargaMedia";
+		else cargaHoraria = null;
 
 		if (ventFormEmpleador.getRdbtnPrimario().isSelected())
 			estudiosCursados = "Primario";
 		else if (ventFormEmpleador.getRdbtnSecundario().isSelected())
 			estudiosCursados = "Secundario";
-		else
+		else if(ventFormEmpleador.getRdbtnTerciario().isSelected())
 			estudiosCursados = "Terciario";
-
+		else estudiosCursados= null;
+		
 		if (ventFormEmpleador.getRdbtnNada().isSelected())
 			experiencia = "Nada";
 		else if (ventFormEmpleador.getRdbtnExpeMedia().isSelected())
 			experiencia = "Media";
-		else
+		else if (ventFormEmpleador.getRdbtnMucha().isSelected())
 			experiencia = "Mucha";
+		else
+			experiencia = null;
 
 		if (ventFormEmpleador.getRdbtnPresencialEmpleador().isSelected())
 			locacion = "Presencial";
 		else if (ventFormEmpleador.getRdbtnHomeOfficeEmpleador().isSelected())
 			locacion = "HomeOffice";
-		else
+		else if (ventFormEmpleador.getRdbtnIndistintoEmpleador().isSelected())
 			locacion = "Indistinto";
+		else
+			locacion = null;
 
 		if (ventFormEmpleador.getRdbtnMenosDe40().isSelected())
 			rangoEtario = "MenosDe40";
 		else if (ventFormEmpleador.getRdbtnEntre40y50().isSelected())
 			rangoEtario = "Entre40y50";
-		else
+		else if (ventFormEmpleador.getRdbtnMayorde50().isSelected())
 			rangoEtario = "MasDe50";
+		else rangoEtario = null;
 
 		if (ventFormEmpleador.getRdbtnRemuneracion1Empleador().isSelected())
 			remuneracion = "V1";
 		else if (ventFormEmpleador.getRdbtnRemuneracion2Empleador().isSelected())
 			remuneracion = "V2";
-		else
+		else if (ventFormEmpleador.getRdbtnRemuneracion3Empleador().isSelected())
 			remuneracion = "V3";
+		else 
+			remuneracion = null;
 
 		if (ventFormEmpleador.getRdbtnManagement().isSelected())
 			tipoPuesto = "Management";
 		else if (ventFormEmpleador.getRdbtnJunior().isSelected())
 			tipoPuesto = "Junior";
-		else
+		else if (ventFormEmpleador.getRdbtnSenior().isSelected())
 			tipoPuesto = "Senior";
+		else 
+			tipoPuesto = null;
 
 		ArrayList<Integer> pesos = new ArrayList<Integer>();
 		pesos.add((int) ventFormEmpleador.getSpinnerLocacion().getValue());
@@ -512,12 +567,10 @@ public class Controlador implements ActionListener
 		pesos.add((int) ventFormEmpleador.getSpinnerExperiencia().getValue());
 		pesos.add((int) ventFormEmpleador.getSpinnerEstudios().getValue());
 
-		sistema.agregaTicketBuscaEmpleado((Empleador) usuario,
-				Integer.parseInt(ventFormEmpleador.getSpinnerEmpSolic().getValue().toString()), locacion,
-				remuneracion, cargaHoraria, tipoPuesto, rangoEtario, experiencia, estudiosCursados, pesos);
+		sistema.agregaTicketBuscaEmpleado((Empleador) usuario,Integer.parseInt(ventFormEmpleador.getSpinnerEmpSolic().getValue().toString()), locacion,remuneracion, cargaHoraria, tipoPuesto, rangoEtario, experiencia, estudiosCursados, pesos);
 	}
 	
-	private void ticketEmpleado(VentanaFormularioEmpleado ventFormEmpleado) {
+	private void ticketEmpleado(VentanaFormularioEmpleado ventFormEmpleado) throws FormularioIncompletoException {
 		String cargaHoraria;
 		String estudiosCursados;
 		String experiencia;
@@ -530,53 +583,65 @@ public class Controlador implements ActionListener
 			cargaHoraria = "CargaCompleta";
 		else if (ventFormEmpleado.getRdbtnExtendida().isSelected())
 			cargaHoraria = "CargaExtendida";
-		else
+		else if (ventFormEmpleado.getRdbtnMedia().isSelected())
 			cargaHoraria = "CargaMedia";
+		else cargaHoraria = null;
 
 		if (ventFormEmpleado.getRdbtnPrimario().isSelected())
 			estudiosCursados = "Primario";
 		else if (ventFormEmpleado.getRdbtnSecundario().isSelected())
 			estudiosCursados = "Secundario";
-		else
+		else if (ventFormEmpleado.getRdbtnTerciario().isSelected())
 			estudiosCursados = "Terciario";
+		else 
+			estudiosCursados = null;
 
 		if (ventFormEmpleado.getRdbtnNada().isSelected())
 			experiencia = "Nada";
 		else if (ventFormEmpleado.getRdbtnExpeMedia().isSelected())
 			experiencia = "Media";
-		else
+		else if (ventFormEmpleado.getRdbtnMucha().isSelected())
 			experiencia = "Mucha";
-
+		else 
+			experiencia = null;
+		
+		
 		if (ventFormEmpleado.getRdbtnPresencialEmpleado().isSelected())
 			locacion = "Presencial";
 		else if (ventFormEmpleado.getRdbtnHomeOfficeEmpleado().isSelected())
 			locacion = "HomeOffice";
-		else
+		else if (ventFormEmpleado.getRdbtnIndistintoEmpleado().isSelected())
 			locacion = "Indistinto";
+		else 
+			locacion = null;
 
 		if (ventFormEmpleado.getRdbtnMenosDe40().isSelected())
 			rangoEtario = "MenosDe40";
 		else if (ventFormEmpleado.getRdbtnEntre40y50().isSelected())
 			rangoEtario = "Entre40y50";
-		else
+		else if (ventFormEmpleado.getRdbtnMayorde50().isSelected())
 			rangoEtario = "MasDe50";
+		else
+			rangoEtario = null;
 
 		if (ventFormEmpleado.getRdbtnRemuneracion1Empleado().isSelected())
 			remuneracion = "V1";
 		else if (ventFormEmpleado.getRdbtnRemuneracion2Empleado().isSelected())
 			remuneracion = "V2";
-		else
+		else if (ventFormEmpleado.getRdbtnRemuneracion3Empleado().isSelected())
 			remuneracion = "V3";
+		else
+			remuneracion = null;
 
 		if (ventFormEmpleado.getRdbtnManagement().isSelected())
 			tipoPuesto = "Management";
 		else if (ventFormEmpleado.getRdbtnJunior().isSelected())
 			tipoPuesto = "Junior";
-		else
+		else if (ventFormEmpleado.getRdbtnSenior().isSelected())
 			tipoPuesto = "Senior";
+		else tipoPuesto=null;
 
-		sistema.asignaTicketBuscaEmpleo((Empleado) usuario, locacion, remuneracion, cargaHoraria, tipoPuesto,
-				rangoEtario, experiencia, estudiosCursados);
+		sistema.asignaTicketBuscaEmpleo((Empleado) usuario, locacion, remuneracion, cargaHoraria, tipoPuesto,rangoEtario, experiencia, estudiosCursados);
 	}
 	
 	private void modificarTicket(Usuario u) {
@@ -642,7 +707,6 @@ public class Controlador implements ActionListener
 			
 			String[] opciones5 = {"Nada", "Media", "Mucha"};
 			eleccion  = JOptionPane.showOptionDialog(null, "Elija una experiencia", "Clickea una opcion", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opciones5, opciones5[0])+1;
-			
 			switch (eleccion)
 			{
 			case 1:
@@ -741,26 +805,19 @@ public class Controlador implements ActionListener
 	private void altaTicket(Usuario u) {
 		
 		if (u.getCodUsuario() == 1) {
-			
 			VentanaFormularioEmpleado vista2 = new VentanaFormularioEmpleado();
 			vista2.nuevoComando();
-			this.setVista(vista2);
-			
-			ticketEmpleado(vista2); 	//con esto se da de alta un ticket de empleado
-			
+			this.setVista(vista2);		
 		}else if (u.getCodUsuario() == 2) {
 			VentanaFormularioEmpleador vista2 = new VentanaFormularioEmpleador();
 			vista2.ocultarBotonAgregar();
-			this.setVista(vista2);	
-			
-			ticketEmpleador(vista2);	//con esto agrego el ticket al arraylist de tickets del empleador
-			
+			this.setVista(vista2);			
 		}
 	}
 	
-	private void activarTicket(Usuario u) {
+	private void activarTicket(Usuario u) { //verificar q no esté activo
 		Ticket ticket;
-		if (usuario.getCodUsuario()==1) {	//empleado
+		if (usuario.getCodUsuario()==1) {	//empleado. verificar q no esté activo
 			Empleado empleado = (Empleado) u;
 			ticket = empleado.getTicket();
 			ticket.setEstado(new ActivoState(ticket));

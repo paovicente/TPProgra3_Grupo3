@@ -19,6 +19,7 @@ import javax.swing.JSpinner;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import javax.swing.SpinnerNumberModel;
 
 public class VentanaFormularioEmpleador extends JFrame implements IVista {
 
@@ -410,6 +411,7 @@ public class VentanaFormularioEmpleador extends JFrame implements IVista {
 		this.panel_pesoLocacion.add(this.lblPesoLocacion);
 		
 		this.spinnerLocacion = new JSpinner();
+		this.spinnerLocacion.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
 		this.spinnerLocacion.setPreferredSize(new Dimension(45, 20));
 		this.spinnerLocacion.setFont(new Font("Century Gothic", Font.PLAIN, 12));
 		this.panel_pesoLocacion.add(this.spinnerLocacion);
@@ -424,6 +426,7 @@ public class VentanaFormularioEmpleador extends JFrame implements IVista {
 		this.panel_pesoRemuneracion.add(this.lblPesoRemuneracion);
 		
 		this.spinnerRemuneracion = new JSpinner();
+		this.spinnerRemuneracion.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
 		this.spinnerRemuneracion.setPreferredSize(new Dimension(45, 20));
 		this.spinnerRemuneracion.setFont(new Font("Century Gothic", Font.PLAIN, 12));
 		this.panel_pesoRemuneracion.add(this.spinnerRemuneracion);
@@ -438,6 +441,7 @@ public class VentanaFormularioEmpleador extends JFrame implements IVista {
 		this.panel_pesoCargaHoraria.add(this.lblPesoCargaHoraria);
 		
 		this.spinnerCargaHoraria = new JSpinner();
+		this.spinnerCargaHoraria.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
 		this.spinnerCargaHoraria.setFont(new Font("Century Gothic", Font.PLAIN, 12));
 		this.spinnerCargaHoraria.setPreferredSize(new Dimension(45, 20));
 		this.panel_pesoCargaHoraria.add(this.spinnerCargaHoraria);
@@ -452,6 +456,7 @@ public class VentanaFormularioEmpleador extends JFrame implements IVista {
 		this.panel_pesoTipoPuesto.add(this.lblPesoTipoPuesto);
 		
 		this.spinnerTipoPuesto = new JSpinner();
+		this.spinnerTipoPuesto.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
 		this.spinnerTipoPuesto.setPreferredSize(new Dimension(45, 20));
 		this.spinnerTipoPuesto.setMinimumSize(new Dimension(45, 20));
 		this.spinnerTipoPuesto.setFont(new Font("Century Gothic", Font.PLAIN, 12));
@@ -467,6 +472,7 @@ public class VentanaFormularioEmpleador extends JFrame implements IVista {
 		this.panel_pesoRangoEtario.add(this.lblPesoRangoEtario);
 		
 		this.spinnerRangoEtario = new JSpinner();
+		this.spinnerRangoEtario.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
 		this.spinnerRangoEtario.setFont(new Font("Century Gothic", Font.PLAIN, 12));
 		this.spinnerRangoEtario.setPreferredSize(new Dimension(45, 20));
 		this.panel_pesoRangoEtario.add(this.spinnerRangoEtario);
@@ -481,6 +487,7 @@ public class VentanaFormularioEmpleador extends JFrame implements IVista {
 		this.panel_pesoExperiencia.add(this.lblPesoExperiencia);
 		
 		this.spinnerExperiencia = new JSpinner();
+		this.spinnerExperiencia.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
 		this.spinnerExperiencia.setPreferredSize(new Dimension(45, 20));
 		this.spinnerExperiencia.setFont(new Font("Century Gothic", Font.PLAIN, 12));
 		this.panel_pesoExperiencia.add(this.spinnerExperiencia);
@@ -495,6 +502,7 @@ public class VentanaFormularioEmpleador extends JFrame implements IVista {
 		this.panel_pesoEstudios.add(this.lblPesoEstudios);
 		
 		this.spinnerEstudios = new JSpinner();
+		this.spinnerEstudios.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
 		this.spinnerEstudios.setFont(new Font("Century Gothic", Font.PLAIN, 12));
 		this.spinnerEstudios.setPreferredSize(new Dimension(45, 20));
 		this.panel_pesoEstudios.add(this.spinnerEstudios);
@@ -509,6 +517,7 @@ public class VentanaFormularioEmpleador extends JFrame implements IVista {
 		this.panel_CantEmpleosSolicitados.add(this.lblCantidadEmpleadosSolicitados);
 		
 		this.spinnerEmpSolic = new JSpinner();
+		this.spinnerEmpSolic.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
 		this.spinnerEmpSolic.setPreferredSize(new Dimension(45, 20));
 		this.spinnerEmpSolic.setFont(new Font("Century Gothic", Font.PLAIN, 12));
 		this.panel_CantEmpleosSolicitados.add(this.spinnerEmpSolic);

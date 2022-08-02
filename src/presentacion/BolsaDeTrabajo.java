@@ -3,17 +3,31 @@ package presentacion;
 import java.util.ArrayList;
 
 import modelo.TicketSimplificado;
+import vistas.VentanaThreads;
 
 public class BolsaDeTrabajo
 {
 	private static BolsaDeTrabajo _instancia = null;
 	private ArrayList<TicketSimplificado> tickets = new ArrayList<TicketSimplificado>();
+	private VentanaThreads ventana;
+
+
+	public BolsaDeTrabajo(VentanaThreads ventana) {
+		super();
+		this.ventana = ventana;
+	}
 
 	public static BolsaDeTrabajo getInstancia()
 	{
 		if (_instancia == null)
-			_instancia = new BolsaDeTrabajo();
-
+			_instancia = new BolsaDeTrabajo(new VentanaThreads());
+		return _instancia;
+	}
+	
+	public static BolsaDeTrabajo getInstancia(VentanaThreads ventana)
+	{
+		if (_instancia == null)
+			_instancia = new BolsaDeTrabajo(ventana);
 		return _instancia;
 	}
 
@@ -33,7 +47,8 @@ public class BolsaDeTrabajo
 		while(tickets.size() == 0) //si no hay tickets, debe esperar a que los empladores generen
 			try
 			{
-				System.out.println("Todavia no hay empleos disponibles.");
+				this.ventana.getTextArea().append("Todavia no hay empleos disponibles.");
+				//System.out.println("Todavia no hay empleos disponibles.");
 				this.wait();
 			} catch (InterruptedException e1)
 			{
@@ -48,8 +63,10 @@ public class BolsaDeTrabajo
 				while (ticket.getEstado().equals("en consulta"))
 					try
 					{
-						System.out.println(nombre + " no consulta el ticket de " + ticket.getEmpleador().getNombre()
+						this.ventana.getTextArea().append(nombre + " no consulta el ticket de " + ticket.getEmpleador().getNombre()
 								+ " porque ya esta en consulta.\n");
+					//	System.out.println(nombre + " no consulta el ticket de " + ticket.getEmpleador().getNombre()
+							//	+ " porque ya esta en consulta.\n");
 						this.wait();
 					} catch (InterruptedException e)
 					{
@@ -60,8 +77,9 @@ public class BolsaDeTrabajo
 				if (!ticket.getEstado().equals("no disponible"))
 				{
 					ticket.cambiaEstado("en consulta"); //esto es para llamar a los metodos de observable
-					System.out
-							.println(nombre + " esta en proceso de consulta con '" + ticket.getEmpleador().getNombre()+"'.\n");
+					this.ventana.getTextArea().append(nombre + " esta en proceso de consulta con '" + ticket.getEmpleador().getNombre()+"'.\n");
+					//System.out
+						//	.println(nombre + " esta en proceso de consulta con '" + ticket.getEmpleador().getNombre()+"'.\n");
 				} else
 					ticket = null;
 			}
@@ -81,8 +99,10 @@ public class BolsaDeTrabajo
 
 	public synchronized void devuelveTicket(String nombre, TicketSimplificado ticket)
 	{
-		System.out.println(nombre + " no consigue trabajo porque su locacion no es compatible con la de '"
+		this.ventana.getTextArea().append(nombre + " no consigue trabajo porque su locacion no es compatible con la de '"
 				+ ticket.getEmpleador().getNombre()+"'.\n");
+		//System.out.println(nombre + " no consigue trabajo porque su locacion no es compatible con la de '"
+			//	+ ticket.getEmpleador().getNombre()+"'.\n");
 		ticket.cambiaEstado("disponible"); //esto es para llamar a los metodos de observable
 		this.notifyAll();
 	}
@@ -99,7 +119,8 @@ public class BolsaDeTrabajo
 
 	public synchronized void noDevuelveTicket(String nombre, TicketSimplificado ticket)
 	{
-		System.out.println(nombre + " consigue empleo con '" + ticket.getEmpleador().getNombre() + "'.\n");
+		this.ventana.getTextArea().append(nombre + " consigue empleo con '" + ticket.getEmpleador().getNombre() + "'.\n");
+	//	System.out.println(nombre + " consigue empleo con '" + ticket.getEmpleador().getNombre() + "'.\n");
 		this.tickets.remove(ticket);
 		ticket.cambiaEstado("no disponible"); //esto es para llamar a los metodos de observable
 		this.notifyAll();

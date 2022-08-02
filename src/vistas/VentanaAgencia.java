@@ -291,6 +291,42 @@ public class VentanaAgencia extends JFrame implements IVista {
 	
 	
 
+	public JButton getBtn_agregarAdmin() {
+		return btn_agregarAdmin;
+	}
+
+
+
+	public JButton getBtn_RondaEncuentros() {
+		return btn_RondaEncuentros;
+	}
+
+
+
+	public JButton getBtn_RondaContrataciones() {
+		return btn_RondaContrataciones;
+	}
+
+
+
+	public JButton getBtn_MuestraEmpleados() {
+		return btn_MuestraEmpleados;
+	}
+
+
+
+	public JButton getBtn_MuestraEmpleadores() {
+		return btn_MuestraEmpleadores;
+	}
+
+
+
+	public JButton getBtn_cerrarSesion() {
+		return btn_cerrarSesion;
+	}
+
+
+
 	public DefaultListModel<UsuarioInteractivo> getModeloListaEmpleadores() {
 		return modeloListaEmpleadores;
 	}

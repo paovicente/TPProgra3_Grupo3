@@ -22,6 +22,7 @@ import java.awt.Point;
 import java.awt.Font;
 import javax.swing.border.LineBorder;
 
+import modelo.TicketBuscaEmpleado;
 import modelo.UsuarioInteractivo;
 
 import java.awt.SystemColor;
@@ -31,6 +32,8 @@ import javax.swing.JTextArea;
 import java.awt.Dimension;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
 
 public class VentanaEmpleado extends JFrame implements IVista {
 
@@ -50,7 +53,7 @@ public class VentanaEmpleado extends JFrame implements IVista {
 	private JPanel panel_labelElecciones;
 	private JPanel panel_textAreaElecciones;
 	private JScrollPane scrollPane;
-	private JList<UsuarioInteractivo> listEleccionesEmpleado;
+	private JList<TicketBuscaEmpleado> listEleccionesEmpleado;
 	private ActionListener actionListener;
 	private JButton btn_rondaElecciones;
 	private JPanel panel_btnRondaElecciones;
@@ -60,15 +63,19 @@ public class VentanaEmpleado extends JFrame implements IVista {
 	private JButton btn_agregarEmpleado;
 	private JPanel panel_btnAgregarEmpleado;
 	private JButton btn_cerrarSesion;
-	private DefaultListModel<UsuarioInteractivo> modeloLista;
+	private DefaultListModel<TicketBuscaEmpleado> modeloLista;
+	private DefaultListModel<String> modeloListaNombres;
 	private JPanel panel_GestionTicket;
 	private JButton btn_GestionTicket;
+	private JScrollPane scrollPane_1;
+	private JList<String> listNombreElecciones;
 
 	/**
 	 * Create the frame.
 	 */
 	public VentanaEmpleado() {
-		this.modeloLista = new DefaultListModel<UsuarioInteractivo>();
+		this.modeloListaNombres = new DefaultListModel<String>();
+		this.modeloLista = new DefaultListModel<TicketBuscaEmpleado>();
 		setTitle("Empleado");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 886, 489);
@@ -134,6 +141,7 @@ public class VentanaEmpleado extends JFrame implements IVista {
 		this.panel_AgregarEmpleado.add(this.panel_btnAgregarEmpleado);
 		
 		this.btn_agregarEmpleado = new JButton("Agregar");
+		this.btn_agregarEmpleado.setActionCommand("AgregarEmpleado");
 		this.panel_btnAgregarEmpleado.add(this.btn_agregarEmpleado);
 		this.btn_agregarEmpleado.setMargin(new Insets(15, 30, 15, 30));
 		this.btn_agregarEmpleado.setFont(new Font("Century Gothic", Font.BOLD, 16));
@@ -174,20 +182,35 @@ public class VentanaEmpleado extends JFrame implements IVista {
 		this.panel_infoElecciones.setLayout(new GridLayout(1, 1, 0, 0));
 		
 		this.panel_textAreaElecciones = new JPanel();
+		this.panel_textAreaElecciones.setBorder(new SoftBevelBorder(BevelBorder.RAISED, new Color(191, 205, 219), new Color(191, 205, 219), new Color(191, 205, 219), new Color(191, 205, 219)));
 		this.panel_textAreaElecciones.setBackground(SystemColor.inactiveCaption);
 		this.panel_infoElecciones.add(this.panel_textAreaElecciones);
-		this.panel_textAreaElecciones.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 10));
+		this.panel_textAreaElecciones.setLayout(new BorderLayout(0, 0));
 		
 		this.scrollPane = new JScrollPane();
-		this.scrollPane.setBorder(new LineBorder(Color.BLACK, 2, true));
-		this.scrollPane.setPreferredSize(new Dimension(350, 120));
-		this.panel_textAreaElecciones.add(this.scrollPane);
+		this.scrollPane.setMaximumSize(new Dimension(500, 150));
+		this.scrollPane.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		this.panel_textAreaElecciones.add(this.scrollPane, BorderLayout.EAST);
 		
-		this.listEleccionesEmpleado = new JList<UsuarioInteractivo>();
+		this.listEleccionesEmpleado = new JList<TicketBuscaEmpleado>();
+		this.listEleccionesEmpleado.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		this.listEleccionesEmpleado.setSize(new Dimension(30, 0));
 		this.listEleccionesEmpleado.setBackground(SystemColor.controlHighlight);
 		this.listEleccionesEmpleado.setFont(new Font("Century Gothic", Font.PLAIN, 14));
 		this.listEleccionesEmpleado.setModel(modeloLista);
 		this.scrollPane.setViewportView(this.listEleccionesEmpleado);
+		
+		this.scrollPane_1 = new JScrollPane();
+		this.scrollPane_1.setBorder(new LineBorder(Color.BLACK, 1, true));
+		this.scrollPane_1.setPreferredSize(new Dimension(160, 40));
+		this.panel_textAreaElecciones.add(this.scrollPane_1, BorderLayout.WEST);
+		
+		this.listNombreElecciones = new JList<String>();
+		this.listNombreElecciones.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		this.listNombreElecciones.setFont(new Font("Century Gothic", Font.PLAIN, 14));
+		this.listNombreElecciones.setBackground(SystemColor.controlHighlight);
+		this.listNombreElecciones.setModel(modeloListaNombres);
+		this.scrollPane_1.setViewportView(this.listNombreElecciones);
 		
 		this.panel_cerrarSesionyGestionTicket = new JPanel();
 		this.panel_cerrarSesionyGestionTicket.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
@@ -233,8 +256,11 @@ public class VentanaEmpleado extends JFrame implements IVista {
 	}
 	
 	
-
-	public DefaultListModel<UsuarioInteractivo> getModeloLista() {
+	public DefaultListModel<String> getModeloListaNombres(){
+		return this.modeloListaNombres;
+	}
+	
+	public DefaultListModel<TicketBuscaEmpleado> getModeloLista() {
 		return modeloLista;
 	}
 
